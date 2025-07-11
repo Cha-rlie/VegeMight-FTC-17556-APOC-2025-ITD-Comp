@@ -27,7 +27,7 @@ public class DriveTrain extends SubsystemBase {
 
         driveTrain = new MecanumDrive(false, FL, FR, BL, BR);
         //setDefaultCommand(new DriveCommand(this));
-        setDefaultCommand(new PerpetualCommand(new InstantCommand(this::driveRobotCentric)));
+        //setDefaultCommand(new PerpetualCommand(new InstantCommand(this::driveRobotCentric, this)));
         //setDefaultCommand(new InstantCommand(() -> driveTrain.driveRobotCentric(OpModeReference.getInstance().getGamePad1().getLeftX(), OpModeReference.getInstance().getGamePad1().getLeftY(), OpModeReference.getInstance().getGamePad1().getRightX()), this));
     }
 
@@ -37,8 +37,8 @@ public class DriveTrain extends SubsystemBase {
         OpModeReference.getInstance().getTelemetry().addData("Velocity Adjuster", velocityAdjuster);
     }
 
-    public void driveRobotCentric() {
-        driveTrain.driveRobotCentric(OpModeReference.getInstance().getGamePad1().getLeftX()*velocityAdjuster, OpModeReference.getInstance().getGamePad1().getLeftY()*velocityAdjuster, OpModeReference.getInstance().getGamePad1().getRightX()*velocityAdjuster);
+    public void driveRobotCentric(double x, double y, double rx) {
+        driveTrain.driveRobotCentric(x*velocityAdjuster, y*velocityAdjuster, rx*velocityAdjuster);
     }
 
     public void decreaseVelocity() {
@@ -63,6 +63,6 @@ class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        driveTrainSystem.driveRobotCentric();
+
     }
 }

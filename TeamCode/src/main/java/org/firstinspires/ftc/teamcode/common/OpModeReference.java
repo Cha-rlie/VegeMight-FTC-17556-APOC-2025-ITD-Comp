@@ -9,9 +9,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.common.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.common.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.common.subsystems.Pitching;
 import org.firstinspires.ftc.teamcode.common.util.Globals;
 
-public class OpModeReference extends SubsystemBase {
+public class OpModeReference {
     private static OpModeReference instance = null;
     HardwareMap hardwareMap;
     GamepadEx gamePad1;
@@ -21,6 +22,7 @@ public class OpModeReference extends SubsystemBase {
     public DriveTrain driveTrainSubSystem;
     public Arm armSubSystem;
     public Lift liftSubSystem;
+    public Pitching pitchingSubSystem;
 
     public static OpModeReference getInstance() {
         if (instance == null) instance = new OpModeReference();
@@ -37,6 +39,7 @@ public class OpModeReference extends SubsystemBase {
         driveTrainSubSystem = new DriveTrain();
         armSubSystem = new Arm();
         liftSubSystem = new Lift();
+        pitchingSubSystem = new Pitching();
     }
 
     public void nullify() {

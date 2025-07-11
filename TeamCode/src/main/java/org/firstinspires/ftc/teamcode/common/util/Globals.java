@@ -16,16 +16,16 @@ public class Globals extends SubsystemBase {
     public static boolean isSampleModeTrue = true;
     public static boolean isBackwardsMode = false;
     public boolean updateRobotStateTrue = true;
-    public static boolean backwardsMode = false; // Maybe? For now, not used
-    public static boolean isLiftDown = false;
-    public static boolean liftAcceptState = false;
-    public static boolean pitchAcceptState = false;
+    public boolean backwardsMode = false; // Maybe? For now, not used
+    public boolean isLiftDown = false;
+    public boolean liftAcceptState = false;
+    public boolean pitchAcceptState = false;
     public boolean armAcceptState = false;
-    public static boolean intakeAcceptState = false;
+    public boolean intakeAcceptState = false;
 
     // Declare the global variables
     private RobotState robotState = RobotState.IDLE;
-    public static RobotState lastRobotState = RobotState.IDLE;
+    public RobotState lastRobotState = RobotState.IDLE;
 
     private HashMap <RobotState, RobotState> goForwardStateValuesOnly;
     private HashMap <RobotState, RobotState> goBackwardStateValuesOnly;
@@ -37,8 +37,8 @@ public class Globals extends SubsystemBase {
         robotState = RobotState.IDLE;
         lastRobotState = RobotState.IDLE;
         goForwardStateValuesOnly = new HashMap<RobotState, RobotState>() {{
-            put(RobotState.IDLE, !isSampleModeTrue ? RobotState.DEPOSIT : RobotState.DEPOSITSPECIMEN);
-            put(RobotState.REJECT, !isSampleModeTrue ? RobotState.HOVERBEFOREGRAB : RobotState.SPECHOVER);
+            put(RobotState.IDLE, isSampleModeTrue ? RobotState.DEPOSIT : RobotState.DEPOSITSPECIMEN);
+            put(RobotState.REJECT, isSampleModeTrue ? RobotState.HOVERBEFOREGRAB : RobotState.SPECHOVER);
             put(RobotState.DEPOSIT, RobotState.IDLE);
             put(RobotState.HOVERAFTERGRAB, RobotState.IDLE);
             put(RobotState.HOVERBEFOREGRAB, RobotState.GRAB);
@@ -48,7 +48,7 @@ public class Globals extends SubsystemBase {
             put(RobotState.SPECGRAB, RobotState.IDLE);
         }};
         goBackwardStateValuesOnly = new HashMap<RobotState, RobotState>() {{
-            put(RobotState.IDLE, !isSampleModeTrue ? RobotState.HOVERBEFOREGRAB : RobotState.SPECHOVER);
+            put(RobotState.IDLE, isSampleModeTrue ? RobotState.HOVERBEFOREGRAB : RobotState.SPECHOVER);
             put(RobotState.DEPOSIT, RobotState.IDLE);
             put(RobotState.HOVERAFTERGRAB, RobotState.GRAB);
             put(RobotState.HOVERBEFOREGRAB, RobotState.IDLE);

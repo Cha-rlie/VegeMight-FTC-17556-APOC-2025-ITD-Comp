@@ -38,7 +38,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void driveRobotCentric(double x, double y, double rx) {
-        driveTrain.driveRobotCentric(x*velocityAdjuster, y*velocityAdjuster, rx*velocityAdjuster);
+        driveTrain.driveRobotCentric(x*velocityAdjuster, y*velocityAdjuster, rx*velocityAdjuster, true);
     }
 
     public void decreaseVelocity() {

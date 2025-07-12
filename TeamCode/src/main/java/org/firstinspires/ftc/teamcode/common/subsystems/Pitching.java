@@ -64,6 +64,7 @@ public class Pitching extends SubsystemBase {
         //hardware.rightArm.setPosition(Math.min(armMiniTargetPosition, armTargetPosition));
         OpModeReference.getInstance().getTelemetry().addData("Pitch Position", pitchingMotor.getCurrentPosition());
         OpModeReference.getInstance().getTelemetry().addData("Pitching RTP", runToPos);
+        OpModeReference.getInstance().getTelemetry().addData("Pitching Power", pitchingMotor.getPower());
     }
 
     public RunCommand turnPitching() {
@@ -106,8 +107,8 @@ public class Pitching extends SubsystemBase {
 
     private double gradualCalculatedPower() {
         double totalDistance = 830;
-        double distanceTravelled = globals.getRobotState() == RobotState.IDLE ? 830 - pitchingMotor.getCurrentPosition() : pitchingMotor.getCurrentPosition();
-        return Math.min(Math.pow(((distanceTravelled + 830*0.5)/830),8) + 0.4, 1);
+        double distanceLeft = globals.getRobotState() == RobotState.IDLE ? pitchingMotor.getCurrentPosition() : 830 - pitchingMotor.getCurrentPosition();
+        return Math.min(Math.pow(((distanceLeft + 830*0.5)/830),8) + 0.2, 1);
     }
 
 

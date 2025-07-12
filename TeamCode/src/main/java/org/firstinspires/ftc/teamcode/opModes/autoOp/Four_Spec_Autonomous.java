@@ -1,26 +1,22 @@
 package org.firstinspires.ftc.teamcode.opModes.autoOp;
 
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
-import com.pedropathing.pathgen.Path;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
-
-@Autonomous(name="Five_Spec_Autonomous", group="Specimens")
-@Disabled
-
-public class Five_Spec_Autonomous extends OpMode {
+@Autonomous (name="Four Spec Autonomous", group="Specimens")
+public class Four_Spec_Autonomous extends OpMode {
     private Follower follower;
 
     /** This is the variable where we store the state of our auto.
@@ -32,7 +28,7 @@ public class Five_Spec_Autonomous extends OpMode {
     private final Pose startPose = new Pose(8.000, 65.000, Math.toRadians(0));  // Starting position
 
     // Declare paths and pathchains
-    private PathChain depositOne, humanPlayerTwo, humanPlayerThree, humanPlayerFour, pickupTwo, depositTwo, pickupThree, depositThree, pickupFour, depositFour, pickupFive,depositFive,park;
+    private PathChain depositOne, humanPlayerTwo, humanPlayerThree, humanPlayerFour, pickupTwo, depositTwo, pickupThree, depositThree, pickupFour, depositFour, park;
 
 
 
@@ -153,28 +149,6 @@ public class Five_Spec_Autonomous extends OpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
-        pickupFive = follower.pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Point(35.000, 72.000, Point.CARTESIAN),
-                                new Point(9.000, 72.000, Point.CARTESIAN),
-                                new Point(8.500, 30.000, Point.CARTESIAN)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .build();
-
-        depositFive = follower.pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Point(8.500, 30.000, Point.CARTESIAN),
-                                new Point(9.000, 72.000, Point.CARTESIAN),
-                                new Point(35.000, 72.000, Point.CARTESIAN)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .build();
-
         park = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
@@ -256,22 +230,12 @@ public class Five_Spec_Autonomous extends OpMode {
                     follower.followPath(depositFour,true);
                     setPathState(10);
                 }
-            case 10: // Spec 5
-                if (!follower.isBusy()){
-                    follower.followPath(pickupFive, true);
-                    setPathState(11);
-                }
-            case 11: // Score
-                if(!follower.isBusy()){
-                    follower.followPath(depositFive, true);
-                    setPathState(12);
-                }
-            case 12: //Park
+            case 10: //Park
                 if(!follower.isBusy()){
                     follower.followPath(park, true);
-                    setPathState(13);
+                    setPathState(11);
                 }
-            case 13:
+            case 11:
                 if (!follower.isBusy()) {
                     setPathState(-1); // End the autonomous routine
                 }

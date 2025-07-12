@@ -41,12 +41,14 @@ public class Pitching extends SubsystemBase {
         runToPos = 0;
 
         stateToValueMap = new HashMap<RobotState, Integer>() {{
+            put(RobotState.INIT, 0);
             put(RobotState.IDLE, 0);
             put(RobotState.DEPOSIT, 0);
+            put(RobotState.DEPOSITRELEASE, 0);
             put(RobotState.HOVERBEFOREGRAB, 830);
             put(RobotState.GRAB, 830);
             put(RobotState.HOVERAFTERGRAB, 830);
-            put(RobotState.SPECHOVER, 0);
+            put(RobotState.SPECHOVERBEFOREGRAB, 0);
             put(RobotState.SPECGRAB, 0);
             put(RobotState.DEPOSITSPECIMEN, 0);
             put(RobotState.PARKASCENT, 0);
@@ -108,7 +110,7 @@ public class Pitching extends SubsystemBase {
     private double gradualCalculatedPower() {
         double totalDistance = 830;
         double distanceLeft = globals.getRobotState() == RobotState.IDLE ? pitchingMotor.getCurrentPosition() : 830 - pitchingMotor.getCurrentPosition();
-        return Math.min(Math.pow(((distanceLeft + 830*0.5)/830),8) + 0.2, 1);
+        return Math.min(Math.pow(((distanceLeft + 830*0.4)/830),8) + 0.15, 1);
     }
 
 

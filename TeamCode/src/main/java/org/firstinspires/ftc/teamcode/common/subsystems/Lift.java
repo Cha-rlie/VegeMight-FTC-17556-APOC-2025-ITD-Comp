@@ -29,6 +29,7 @@ public class Lift extends SubsystemBase {
     public int RTP;
     public int adjustment;
     Globals globals;
+    public boolean lowBasket;
 
     public Lift() {
         CommandScheduler.getInstance().registerSubsystem(this);
@@ -39,6 +40,7 @@ public class Lift extends SubsystemBase {
 
         RTP = 0;
         adjustment = 0;
+        lowBasket = false;
         OpModeReference.getInstance().getTelemetry().addLine("Slides Initalising");
         motorLiftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLiftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -101,7 +103,10 @@ public class Lift extends SubsystemBase {
                             RTP = 0;
                             break;
                         case DEPOSIT:
-                            RTP = 1300;
+                        case DEPOSITRELEASE:
+                            if (!lowBasket) {
+                                RTP = 1300;
+                            } else {RTP = 700;}
                             break;
                         case HOVERBEFOREGRAB:
                         case GRAB:
@@ -139,6 +144,12 @@ public class Lift extends SubsystemBase {
                         adjustment = -RTP;
                     }
                 });
+    }
+
+    public InstantCommand toggleLowBasket() {
+        return new InstantCommand(() -> {
+           lowBasket = !lowBasket;
+        });
     }
 
     @NonNull

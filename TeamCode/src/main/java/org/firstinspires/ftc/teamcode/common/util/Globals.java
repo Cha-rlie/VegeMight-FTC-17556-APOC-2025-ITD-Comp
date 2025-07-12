@@ -24,38 +24,49 @@ public class Globals extends SubsystemBase {
     public boolean intakeAcceptState = false;
 
     // Declare the global variables
-    private RobotState robotState = RobotState.IDLE;
-    public RobotState lastRobotState = RobotState.IDLE;
+    private RobotState robotState;
+    public RobotState lastRobotState;
 
     private HashMap <RobotState, RobotState> goForwardStateValuesOnly;
     private HashMap <RobotState, RobotState> goBackwardStateValuesOnly;
     private HashMap <RobotState, RobotState> goForwardStateForBackwardModeValuesOnly;
     private HashMap <RobotState, RobotState> goBackwardStateForBackwardModeValuesOnly;
+    private HashMap <RobotState, RobotState> goForwardStateValuesOnlyForSpec;
+    private HashMap <RobotState, RobotState> goBackwardStateValuesOnlyForSpec;
 
     // Constructor that builds the drivetrain subsystem class and Hashmaps :D
     public Globals() {
-        robotState = RobotState.IDLE;
-        lastRobotState = RobotState.IDLE;
         goForwardStateValuesOnly = new HashMap<RobotState, RobotState>() {{
-            put(RobotState.IDLE, isSampleModeTrue ? RobotState.DEPOSIT : RobotState.DEPOSITSPECIMEN);
-            put(RobotState.REJECT, isSampleModeTrue ? RobotState.HOVERBEFOREGRAB : RobotState.SPECHOVER);
-            put(RobotState.DEPOSIT, RobotState.IDLE);
+            put(RobotState.IDLE, RobotState.DEPOSIT);
+            put(RobotState.REJECT, RobotState.HOVERBEFOREGRAB);
+            put(RobotState.DEPOSIT, RobotState.DEPOSITRELEASE);
+            put(RobotState.DEPOSITRELEASE, RobotState.IDLE);
             put(RobotState.HOVERAFTERGRAB, RobotState.IDLE);
             put(RobotState.HOVERBEFOREGRAB, RobotState.GRAB);
             put(RobotState.GRAB, RobotState.HOVERAFTERGRAB);
-            put(RobotState.DEPOSITSPECIMEN, RobotState.IDLE);
-            put(RobotState.SPECHOVER, RobotState.GRAB);
-            put(RobotState.SPECGRAB, RobotState.IDLE);
         }};
         goBackwardStateValuesOnly = new HashMap<RobotState, RobotState>() {{
-            put(RobotState.IDLE, isSampleModeTrue ? RobotState.HOVERBEFOREGRAB : RobotState.SPECHOVER);
+            put(RobotState.IDLE, RobotState.HOVERBEFOREGRAB);
             put(RobotState.DEPOSIT, RobotState.IDLE);
+            put(RobotState.DEPOSITRELEASE, RobotState.IDLE);
             put(RobotState.HOVERAFTERGRAB, RobotState.GRAB);
             put(RobotState.HOVERBEFOREGRAB, RobotState.IDLE);
             put(RobotState.GRAB, RobotState.HOVERBEFOREGRAB);
+        }};
+        // For Specimen Mode
+        goForwardStateValuesOnlyForSpec = new HashMap<RobotState, RobotState>() {{
+            put(RobotState.IDLE, RobotState.DEPOSITSPECIMEN);
+            put(RobotState.DEPOSITSPECIMEN, RobotState.DEPOSITSPECIMENRELEASE);
+            put(RobotState.DEPOSITSPECIMENRELEASE, RobotState.IDLE);
+            put(RobotState.SPECHOVERBEFOREGRAB, RobotState.SPECGRAB);
+            put(RobotState.SPECGRAB, RobotState.IDLE);
+        }};
+        goBackwardStateValuesOnlyForSpec = new HashMap<RobotState, RobotState>() {{
+            put(RobotState.IDLE, RobotState.SPECHOVERBEFOREGRAB);
             put(RobotState.DEPOSITSPECIMEN, RobotState.IDLE);
-            put(RobotState.SPECHOVER, RobotState.IDLE);
-            put(RobotState.SPECGRAB, RobotState.SPECHOVER);
+            put(RobotState.DEPOSITSPECIMENRELEASE, RobotState.IDLE);
+            put(RobotState.SPECHOVERBEFOREGRAB, RobotState.IDLE);
+            put(RobotState.SPECGRAB, RobotState.SPECHOVERBEFOREGRAB);
         }};
         // For Backwards Mode
         goForwardStateForBackwardModeValuesOnly = new HashMap<RobotState, RobotState>() {{
@@ -74,6 +85,7 @@ public class Globals extends SubsystemBase {
         }};
 
         robotState = RobotState.IDLE;
+        lastRobotState = RobotState.IDLE;
         backwardsMode = false;
         resetAllSubsystemAcceptance();
 
@@ -144,6 +156,17 @@ public class Globals extends SubsystemBase {
                         robotState = RobotState.IDLE;
                     }
                 });
+    }
+
+    public InstantCommand toggleSampleSpecimenModes() {
+        return new InstantCommand(() -> {
+           if (robotState == RobotState.IDLE) {
+               isSampleModeTrue = !isSampleModeTrue;
+           } else if (robotState == RobotState.DEPOSITRELEASE) {
+               goToIdle().execute();
+               isSampleModeTrue = !isSampleModeTrue;
+           }
+        });
     }
 
     @NonNull

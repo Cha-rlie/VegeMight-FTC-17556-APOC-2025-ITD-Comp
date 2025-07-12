@@ -33,12 +33,14 @@ public class Arm extends SubsystemBase {
         rightArm.setDirection(Servo.Direction.REVERSE);
 
         stateToPositionMap = new HashMap<RobotState, Double>() {{
-            put(RobotState.IDLE, 0.50);
-            put(RobotState.DEPOSIT, 0.41);
-            put(RobotState.HOVERBEFOREGRAB, 0.50);
-            put(RobotState.GRAB, 0.52);
-            put(RobotState.HOVERAFTERGRAB, 0.50);
-            put(RobotState.SPECHOVER, 0.0);
+            put(RobotState.INIT, 0.05);
+            put(RobotState.IDLE, 0.11);
+            put(RobotState.DEPOSIT, 0.0);
+            put(RobotState.DEPOSITRELEASE, 0.0);
+            put(RobotState.HOVERBEFOREGRAB, 0.002);
+            put(RobotState.GRAB, 0.08);
+            put(RobotState.HOVERAFTERGRAB, 0.002);
+            put(RobotState.SPECHOVERBEFOREGRAB, 0.0);
             put(RobotState.SPECGRAB, 0.0);
             put(RobotState.DEPOSITSPECIMEN, 0.0);
             put(RobotState.BACKWARDGRAB, 0.052);
@@ -76,17 +78,18 @@ public class Arm extends SubsystemBase {
     @NonNull
     public InstantCommand adjustArmUp() {
         return new InstantCommand(()-> {
-                    adjustment += 0.03;
-                    OpModeReference.getInstance().getTelemetry().addLine("Arm Adjusted");
-                });
+            adjustment = armPosition + adjustment + 0.03 < 1 ? adjustment + 0.03 : 1-armPosition;
+            OpModeReference.getInstance().getTelemetry().addLine("Arm Adjusted");
+        });
     }
 
     @NonNull
     public InstantCommand adjustArmDown() {
         return new InstantCommand(()-> {
-                    adjustment -= 0.03;
-                    OpModeReference.getInstance().getTelemetry().addLine("Arm Adjusted");
-                });
+            adjustment = armPosition + adjustment - 0.03 > 0 ? adjustment - 0.03 : -armPosition;
+            adjustment -= 0.03;
+            OpModeReference.getInstance().getTelemetry().addLine("Arm Adjusted");
+        });
     }
 
     @NonNull

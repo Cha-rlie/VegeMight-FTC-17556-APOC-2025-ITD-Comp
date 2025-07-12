@@ -43,8 +43,19 @@ public class FreshLiberty extends CommandOpMode {
         gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustUp());
         gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustDown());
 
+        gamePad1.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(OpModeReference.getInstance().intakeSubSystem.toggleClaw());
+        gamePad2.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(OpModeReference.getInstance().intakeSubSystem.toggleClaw());
+
         gamePad1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(OpModeReference.getInstance().armSubSystem.adjustArmUp());
         gamePad1.getGamepadButton(GamepadKeys.Button.A).whenPressed(OpModeReference.getInstance().armSubSystem.adjustArmDown());
+
+        gamePad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustWristUp());
+        gamePad2.getGamepadButton(GamepadKeys.Button.A).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustWristDown());
+
+        gamePad1.getGamepadButton(GamepadKeys.Button.X).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotLeft());
+        gamePad1.getGamepadButton(GamepadKeys.Button.B).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotRight());
+        gamePad2.getGamepadButton(GamepadKeys.Button.X).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotLeft());
+        gamePad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotRight());
 
     }
 

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.common.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.common.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.common.subsystems.Pitching;
 import org.firstinspires.ftc.teamcode.common.util.Globals;
@@ -23,6 +24,7 @@ public class OpModeReference {
     public Arm armSubSystem;
     public Lift liftSubSystem;
     public Pitching pitchingSubSystem;
+    public Intake intakeSubSystem;
 
     public static OpModeReference getInstance() {
         if (instance == null) instance = new OpModeReference();
@@ -40,6 +42,7 @@ public class OpModeReference {
         armSubSystem = new Arm();
         liftSubSystem = new Lift();
         pitchingSubSystem = new Pitching();
+        intakeSubSystem = new Intake();
     }
 
     public void nullify() {

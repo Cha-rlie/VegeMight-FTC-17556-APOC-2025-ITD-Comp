@@ -29,8 +29,10 @@ public class Intake extends SubsystemBase {
     private HashMap<RobotState, Double> stateToPositionMapForWrist;
     private HashMap<RobotState, Double> stateToPositionMapForRot;
     Globals globals;
+    private boolean isBusy;
 
     public Intake() {
+        isBusy = false;
         CommandScheduler.getInstance().registerSubsystem(this);
         wrist = OpModeReference.getInstance().getHardwareMap().get(Servo.class, "W");
         clawRot = OpModeReference.getInstance().getHardwareMap().get(Servo.class, "R");
@@ -57,12 +59,12 @@ public class Intake extends SubsystemBase {
         stateToPositionMapForRot = new HashMap<RobotState, Double>() {{
             put(RobotState.INIT, 0.0);
             put(RobotState.IDLE, 1.0);
-            put(RobotState.DEPOSIT, 0.0);
-            put(RobotState.DEPOSITRELEASE, 0.0);
+            put(RobotState.DEPOSIT, 1.0);
+            put(RobotState.DEPOSITRELEASE, 1.0);
             put(RobotState.HOVERBEFOREGRAB, 0.50);
-            put(RobotState.GRAB, 0.52);
-            put(RobotState.GRABCLOSE, 0.52);
-            put(RobotState.HOVERAFTERGRAB, 0.50);
+            put(RobotState.GRAB, 1.0);
+            put(RobotState.GRABCLOSE, 1.0);
+            put(RobotState.HOVERAFTERGRAB, 1.0);
             put(RobotState.SPECHOVERBEFOREGRAB, 0.0);
             put(RobotState.SPECGRAB, 0.0);
             put(RobotState.DEPOSITSPECIMEN, 0.0);
@@ -84,10 +86,12 @@ public class Intake extends SubsystemBase {
         OpModeReference.getInstance().getTelemetry().addData("Wrist Pos", wrist.getPosition());
         OpModeReference.getInstance().getTelemetry().addData("Claw Rot Pos", clawRot.getPosition());
         OpModeReference.getInstance().getTelemetry().addData("Claw Grip Open?", clawOpen);
+        isBusy = true;
     }
 
     public RunCommand controlIntake() {
         return new RunCommand(() -> {
+            isBusy = false;
             if (globals.updateRobotStateTrue && !globals.intakeAcceptState) {
                 globals.intakeAcceptState = true;
                 rotPosition = stateToPositionMapForRot.get(globals.getRobotState());
@@ -119,7 +123,7 @@ public class Intake extends SubsystemBase {
             clawRot.setPosition(rotPosition + rotAdjustment);
             if (clawOpen) {
                 clawGripper.setPosition(0.75);
-            } else {clawGripper.setPosition(0.95);}
+            } else {clawGripper.setPosition(0.97);}
         }, this);
     }
 
@@ -164,5 +168,7 @@ public class Intake extends SubsystemBase {
             OpModeReference.getInstance().getTelemetry().addLine("Arm Adjustment Reset");
         });
     }
+
+    public boolean isBusy() {return isBusy;}
 
 }

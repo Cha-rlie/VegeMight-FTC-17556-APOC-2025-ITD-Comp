@@ -37,6 +37,7 @@ public class LimeLightTest extends LinearOpMode {
                     telemetry.addData("tx", result.getTx());
                     telemetry.addData("ty", result.getTy());
                     telemetry.addData("est distance from target",(limelightHeight-sampleHeight)/Math.tan(Math.toRadians(limelightAngle-result.getTy())));
+                    telemetry.addData("Req extension",(((limelightHeight-sampleHeight)/Math.tan(Math.toRadians(limelightAngle-result.getTy())))-15.625)/0.0425);
                 } else {
                     telemetry.addLine("Invalid Result");
                 }

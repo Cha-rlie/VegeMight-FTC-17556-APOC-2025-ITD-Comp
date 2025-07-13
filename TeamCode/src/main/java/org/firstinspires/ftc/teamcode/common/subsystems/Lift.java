@@ -30,8 +30,10 @@ public class Lift extends SubsystemBase {
     public int adjustment;
     Globals globals;
     public boolean lowBasket;
+    private boolean isBusy;
 
     public Lift() {
+        isBusy = false;
         CommandScheduler.getInstance().registerSubsystem(this);
         motorLiftL = OpModeReference.getInstance().getHardwareMap().get(DcMotorEx.class, "LS");
         motorLiftR = OpModeReference.getInstance().getHardwareMap().get(DcMotorEx.class, "RS");
@@ -71,10 +73,12 @@ public class Lift extends SubsystemBase {
         OpModeReference.getInstance().getTelemetry().addData("Lift Target Position", motorLiftL.getTargetPosition());
         OpModeReference.getInstance().getTelemetry().addData("LS Pos", motorLiftL.getCurrentPosition());
         OpModeReference.getInstance().getTelemetry().addData("LS Power", motorLiftL.getPower());
+        isBusy = true;
     }
 
     public RunCommand goToPosition() {
         return new RunCommand(() -> {
+            isBusy = false;
             if (globals.updateRobotStateTrue && !globals.liftAcceptState) {
                 updatePosFromState().schedule();
             }
@@ -156,8 +160,15 @@ public class Lift extends SubsystemBase {
     public InstantCommand resetAdjustment() {
         return new InstantCommand(() -> {
             adjustment = 0;
-            OpModeReference.getInstance().getTelemetry().addLine("Lift Adjustment Reset");
+            OpModeReference.getInstance().getTelemetry().addLine("Lift" +
+                    "' Adjustment Reset");
         });
+    }
+
+    public boolean isBusy() {
+        if (!isBusy) {
+            return motorLiftL.isBusy();
+        } else return true;
     }
 
 }

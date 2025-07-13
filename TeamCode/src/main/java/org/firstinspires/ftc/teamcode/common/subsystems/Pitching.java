@@ -27,8 +27,10 @@ public class Pitching extends SubsystemBase {
     private HashMap<RobotState, Integer> stateToValueMap;
     public int runToPos = 0;
     Globals globals;
+    private boolean isBusy;
 
     public Pitching() {
+        isBusy = false;
         CommandScheduler.getInstance().registerSubsystem(this);
         pitchingMotor = OpModeReference.getInstance().getHardwareMap().get(DcMotorEx.class, "P");
         //pitchingMotor = new MotorEx(OpModeReference.getInstance().getHardwareMap(), "P", Motor.GoBILDA.RPM_435);
@@ -68,10 +70,12 @@ public class Pitching extends SubsystemBase {
         OpModeReference.getInstance().getTelemetry().addData("Pitch Position", pitchingMotor.getCurrentPosition());
         OpModeReference.getInstance().getTelemetry().addData("Pitching RTP", runToPos);
         OpModeReference.getInstance().getTelemetry().addData("Pitching Power", pitchingMotor.getPower());
+        isBusy = true;
     }
 
     public RunCommand turnPitching() {
         return new RunCommand(() -> {
+            isBusy = false;
             if (globals.updateRobotStateTrue && !globals.pitchAcceptState) {
                 if (stateToValueMap.containsKey(globals.getRobotState())) {
                     if (globals.getRobotState() == RobotState.IDLE) {
@@ -114,6 +118,10 @@ public class Pitching extends SubsystemBase {
         return Math.min(Math.pow(((distanceLeft + 830*0.4)/830),8) + 0.15, 1);
     }
 
-
+    public boolean isBusy() {
+        if (!isBusy) {
+            return pitchingMotor.isBusy();
+        } else return true;
+    }
 
 }

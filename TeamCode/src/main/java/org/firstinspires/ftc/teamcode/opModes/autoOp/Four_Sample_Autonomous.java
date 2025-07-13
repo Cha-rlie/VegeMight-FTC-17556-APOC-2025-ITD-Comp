@@ -133,11 +133,11 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 break;
 
             case 1: // Wait until the robot is near the scoring position
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && !OpModeReference.getInstance().isBusy()) {
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSITRELEASE)
                             .andThen(new WaitCommand(500))
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
-                            .andThen(new WaitCommand(100))
+                            .andThen(new WaitCommand(500))
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.HOVERBEFOREGRAB))
                             .schedule();
                     follower.followPath(grabPickup1, true);
@@ -146,7 +146,7 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 break;
 
             case 2: // Wait until the robot is near the first sample pickup position
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && !OpModeReference.getInstance().isBusy()) {
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRAB)
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRABCLOSE))
                             .andThen(new WaitCommand(100))
@@ -159,7 +159,7 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 break;
 
             case 3: // Wait until the robot returns to the scoring position
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && !OpModeReference.getInstance().isBusy()) {
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSITRELEASE)
                             .andThen(new WaitCommand(500))
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
@@ -172,7 +172,7 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 break;
 
             case 4: // Wait until the robot is near the second sample pickup position
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && !OpModeReference.getInstance().isBusy()) {
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRAB)
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRABCLOSE))
                             .andThen(new WaitCommand(100))
@@ -185,7 +185,7 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 break;
 
             case 5: // Wait until the robot returns to the scoring position
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && !OpModeReference.getInstance().isBusy()) {
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSITRELEASE)
                             .andThen(new WaitCommand(500))
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
@@ -198,7 +198,7 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 break;
 
             case 6: // Wait until the robot is near the third sample pickup position
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && !OpModeReference.getInstance().isBusy()) {
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRAB)
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRABCLOSE))
                             .andThen(new WaitCommand(100))
@@ -211,7 +211,7 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 break;
 
             case 7: // Wait until the robot returns to the scoring position
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && !OpModeReference.getInstance().isBusy()) {
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSITRELEASE)
                             .andThen(new WaitCommand(500))
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
@@ -224,7 +224,7 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 break;
 
             case 8: // Wait until the robot is near the parking position
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && !OpModeReference.getInstance().isBusy()) {
                     setPathState(-1); // End the autonomous routine
                 }
                 break;

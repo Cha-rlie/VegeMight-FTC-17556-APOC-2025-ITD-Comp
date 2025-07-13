@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.common.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.common.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.common.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.common.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.common.subsystems.Pitching;
 import org.firstinspires.ftc.teamcode.common.util.Globals;
 
@@ -25,6 +26,8 @@ public class OpModeReference {
     public Lift liftSubSystem;
     public Pitching pitchingSubSystem;
     public Intake intakeSubSystem;
+    public Limelight limelightSubsystem;
+
 
     public static OpModeReference getInstance() {
         if (instance == null) instance = new OpModeReference();
@@ -43,6 +46,7 @@ public class OpModeReference {
         liftSubSystem = new Lift();
         pitchingSubSystem = new Pitching();
         intakeSubSystem = new Intake();
+        limelightSubsystem = new Limelight();
     }
 
     public void nullify() {
@@ -63,5 +67,9 @@ public class OpModeReference {
 
     public Telemetry getTelemetry() {
         return telemetry;
+    }
+
+    public boolean isBusy() {
+        return intakeSubSystem.isBusy() || liftSubSystem.isBusy() || armSubSystem.isBusy() || pitchingSubSystem.isBusy();
     }
 }

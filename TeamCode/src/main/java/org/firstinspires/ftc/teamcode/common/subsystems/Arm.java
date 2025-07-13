@@ -24,8 +24,10 @@ public class Arm extends SubsystemBase {
     public static double adjustment = 0;
     private HashMap<RobotState, Double> stateToPositionMap;
     Globals globals;
+    private boolean isBusy;
 
     public Arm() {
+        isBusy = false;
         CommandScheduler.getInstance().registerSubsystem(this);
         leftArm = OpModeReference.getInstance().getHardwareMap().get(Servo.class, "LA");
         rightArm = OpModeReference.getInstance().getHardwareMap().get(Servo.class, "RA");
@@ -62,10 +64,12 @@ public class Arm extends SubsystemBase {
         OpModeReference.getInstance().getTelemetry().addData("Arm RTP", armPosition);
         OpModeReference.getInstance().getTelemetry().addData("Actual Left Arm Pos", leftArm.getPosition());
         OpModeReference.getInstance().getTelemetry().addData("Actual Right Arm Pos", rightArm.getPosition());
+        isBusy = true;
     }
 
     public RunCommand turnArm() {
         return new RunCommand(() -> {
+            isBusy = false;
             if (globals.updateRobotStateTrue && !globals.armAcceptState) {
                 globals.armAcceptState = true;
                 armPosition = stateToPositionMap.get(globals.getRobotState());
@@ -100,5 +104,7 @@ public class Arm extends SubsystemBase {
                     OpModeReference.getInstance().getTelemetry().addLine("Arm Adjustment Reset");
                 });
     }
+
+    public boolean isBusy() {return isBusy;}
 
 }

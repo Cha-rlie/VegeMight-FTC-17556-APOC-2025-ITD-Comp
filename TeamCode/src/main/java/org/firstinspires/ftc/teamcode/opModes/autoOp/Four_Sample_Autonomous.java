@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.opModes.autoOp;
 
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
@@ -19,14 +22,16 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.common.OpModeReference;
+import org.firstinspires.ftc.teamcode.common.util.RobotState;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
 @Autonomous (name="Four_Sample_Autonomous", group="Sample")
-@Disabled
 
-public class Four_Sample_Autonomous extends OpMode {
+public class Four_Sample_Autonomous extends CommandOpMode {
     // Initialise the PedroPathing Follower
+    private boolean once = true;
     private Follower follower;
 
     /** This is the variable where we store the state of our auto.
@@ -123,10 +128,18 @@ public class Four_Sample_Autonomous extends OpMode {
             case 0: // Move from start to scoring position
                 follower.followPath(scorePreload);
                 setPathState(1);
+                OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT)
+                        .andThen(new WaitCommand(2000)).schedule();
                 break;
 
             case 1: // Wait until the robot is near the scoring position
                 if (!follower.isBusy()) {
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSITRELEASE)
+                            .andThen(new WaitCommand(500))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
+                            .andThen(new WaitCommand(100))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.HOVERBEFOREGRAB))
+                            .schedule();
                     follower.followPath(grabPickup1, true);
                     setPathState(2);
                 }
@@ -134,13 +147,25 @@ public class Four_Sample_Autonomous extends OpMode {
 
             case 2: // Wait until the robot is near the first sample pickup position
                 if (!follower.isBusy()) {
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRAB)
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRABCLOSE))
+                            .andThen(new WaitCommand(100))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
+                            .schedule();
                     follower.followPath(scorePickup1, true);
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT).schedule();
                     setPathState(3);
                 }
                 break;
 
             case 3: // Wait until the robot returns to the scoring position
                 if (!follower.isBusy()) {
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSITRELEASE)
+                            .andThen(new WaitCommand(500))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
+                            .andThen(new WaitCommand(100))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.HOVERBEFOREGRAB))
+                            .schedule();
                     follower.followPath(grabPickup2, true);
                     setPathState(4);
                 }
@@ -148,13 +173,25 @@ public class Four_Sample_Autonomous extends OpMode {
 
             case 4: // Wait until the robot is near the second sample pickup position
                 if (!follower.isBusy()) {
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRAB)
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRABCLOSE))
+                            .andThen(new WaitCommand(100))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
+                            .schedule();
                     follower.followPath(scorePickup2, true);
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT).schedule();
                     setPathState(5);
                 }
                 break;
 
             case 5: // Wait until the robot returns to the scoring position
                 if (!follower.isBusy()) {
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSITRELEASE)
+                            .andThen(new WaitCommand(500))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
+                            .andThen(new WaitCommand(100))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.HOVERBEFOREGRAB))
+                            .schedule();
                     follower.followPath(grabPickup3, true);
                     setPathState(6);
                 }
@@ -162,13 +199,25 @@ public class Four_Sample_Autonomous extends OpMode {
 
             case 6: // Wait until the robot is near the third sample pickup position
                 if (!follower.isBusy()) {
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRAB)
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRABCLOSE))
+                            .andThen(new WaitCommand(100))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
+                            .schedule();
                     follower.followPath(scorePickup3, true);
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT).schedule();
                     setPathState(7);
                 }
                 break;
 
             case 7: // Wait until the robot returns to the scoring position
                 if (!follower.isBusy()) {
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSITRELEASE)
+                            .andThen(new WaitCommand(500))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
+                            .andThen(new WaitCommand(100))
+                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.PARKASCENT))
+                            .schedule();
                     follower.followPath(park, true);
                     setPathState(8);
                 }
@@ -189,9 +238,14 @@ public class Four_Sample_Autonomous extends OpMode {
 
 
     @Override
-    public void loop() {
-
+    public void run() {
+        if (once) {
+            opmodeTimer.resetTimer();
+            setPathState(0);
+            once = false;
+        }
         // These loop the movements of the robot
+        CommandScheduler.getInstance().run();
         follower.update();
         autonomousPathUpdate();
 
@@ -204,7 +258,10 @@ public class Four_Sample_Autonomous extends OpMode {
     }
 
     @Override
-    public void init() {
+    public void initialize() {
+        CommandScheduler.getInstance().reset();
+        OpModeReference.getInstance().initHardware(hardwareMap, new GamepadEx(gamepad1), new GamepadEx(gamepad2), telemetry, 0, 0 ,0);
+
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
@@ -213,11 +270,6 @@ public class Four_Sample_Autonomous extends OpMode {
         follower = new Follower(hardwareMap, FConstants.class, LConstants.class); /* Check Later */
         follower.setStartingPose(startPose);
         buildPaths();
-    }
-
-    @Override
-    public void start() {
-        opmodeTimer.resetTimer();
-        setPathState(0);
+        CommandScheduler.getInstance().run();
     }
 }

@@ -97,7 +97,19 @@ public class Globals extends SubsystemBase {
 
     @NonNull
     public void setRobotState(RobotState newRobotState) {
+        lastRobotState = robotState;
         robotState = newRobotState;
+        updateRobotStateTrue = true;
+        resetAllSubsystemAcceptance();
+    }
+
+    public InstantCommand setRobotStateCommand(RobotState newRobotState) {
+        return new InstantCommand(()-> {
+            lastRobotState = robotState;
+            robotState = newRobotState;
+            updateRobotStateTrue = true;
+            resetAllSubsystemAcceptance();
+        });
     }
 
     @NonNull

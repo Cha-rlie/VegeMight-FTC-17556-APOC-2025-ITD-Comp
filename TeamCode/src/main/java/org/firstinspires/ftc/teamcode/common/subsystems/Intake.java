@@ -43,6 +43,7 @@ public class Intake extends SubsystemBase {
             put(RobotState.DEPOSITRELEASE, 0.0);
             put(RobotState.HOVERBEFOREGRAB, 0.56);
             put(RobotState.GRAB, 0.68);
+            put(RobotState.GRABCLOSE, 0.68);
             put(RobotState.HOVERAFTERGRAB, 0.56);
             put(RobotState.SPECHOVERBEFOREGRAB, 0.0);
             put(RobotState.SPECGRAB, 0.0);
@@ -57,8 +58,10 @@ public class Intake extends SubsystemBase {
             put(RobotState.INIT, 0.0);
             put(RobotState.IDLE, 1.0);
             put(RobotState.DEPOSIT, 0.0);
+            put(RobotState.DEPOSITRELEASE, 0.0);
             put(RobotState.HOVERBEFOREGRAB, 0.50);
             put(RobotState.GRAB, 0.52);
+            put(RobotState.GRABCLOSE, 0.52);
             put(RobotState.HOVERAFTERGRAB, 0.50);
             put(RobotState.SPECHOVERBEFOREGRAB, 0.0);
             put(RobotState.SPECGRAB, 0.0);

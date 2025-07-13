@@ -1,10 +1,7 @@
-package org.firstinspires.ftc.teamcode.opModes.auto;
+package org.firstinspires.ftc.teamcode.opModes.autoOp;
 
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
@@ -22,28 +19,23 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.common.OpModeReference;
-import org.firstinspires.ftc.teamcode.common.util.RobotState;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
-@Autonomous (name="test", group="Sample")
-public class test extends CommandOpMode {
-    // Initialise the PedroPathing Follower
-    boolean once = true;
+@Autonomous (name="Four_Sample_Autonomous_ONLY_PATH", group="Sample")
 
+public class Four_Sample_Autonomous_ONLYPATH extends OpMode {
+    // Initialise the PedroPathing Follower
     private Follower follower;
 
-    /**
-     * This is the variable where we store the state of our auto.
-     * It is used by the pathUpdate method.
-     */
+    /** This is the variable where we store the state of our auto.
+     * It is used by the pathUpdate method. */
     private int pathState;
     private Timer pathTimer, actionTimer, opmodeTimer;
 
     // Initialise the poses
     private final Pose startPose = new Pose(9.000, 113, Math.toRadians(0));  // Starting position
-    private final Pose scorePose = new Pose(9, 113, Math.toRadians(-45)); // Scoring position
+    private final Pose scorePose = new Pose(14.7, 128.8, Math.toRadians(-45)); // Scoring position
 
     private final Pose pickup1Pose = new Pose(24, 121.5, Math.toRadians(0)); // First sample pickup
     private final Pose pickup2Pose = new Pose(24, 131.5, Math.toRadians(0)); // Second sample pickup
@@ -63,6 +55,7 @@ public class test extends CommandOpMode {
         scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
 
 
+
         grabPickup1 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
@@ -72,14 +65,63 @@ public class test extends CommandOpMode {
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
                 .build();
+
+        scorePickup1 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(24.000, 121.500, Point.CARTESIAN),
+                                new Point(14.700, 128.800, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
+                .build();
+
+        grabPickup2 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(14.700, 128.800, Point.CARTESIAN),
+                                new Point(24.000, 131.500, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
+                .build();
+
+        scorePickup2 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(24.000, 131.500, Point.CARTESIAN),
+                                new Point(14.700, 128.800, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
+                .build();
+
+        grabPickup3 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(14.700, 128.800, Point.CARTESIAN),
+                                new Point(24.000, 135.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(30))
+                .build();
+
+        scorePickup3 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(24.000, 135.000, Point.CARTESIAN),
+                                new Point(14.700, 128.800, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(30), Math.toRadians(-45))
+                .build();
     }
 
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0: // Move from start to scoring position
-                new InstantCommand(()->OpModeReference.getInstance().globalsSubSystem.setRobotState(RobotState.DEPOSIT)).schedule();
                 follower.followPath(scorePreload);
-                setPathState(-1);
+                setPathState(1);
                 break;
 
             case 1: // Wait until the robot is near the scoring position
@@ -146,18 +188,11 @@ public class test extends CommandOpMode {
 
 
     @Override
-    public void run() {
-        if (once) {
-            opmodeTimer.resetTimer();
-            setPathState(0);
-            CommandScheduler.getInstance().run();
-            once = false;
-        }
+    public void loop() {
 
         // These loop the movements of the robot
-        new InstantCommand(()-> follower.update()).schedule();
-        new InstantCommand(this::autonomousPathUpdate).schedule();
-        CommandScheduler.getInstance().run();
+        follower.update();
+        autonomousPathUpdate();
 
         // Feedback to Driver Hub
         telemetry.addData("path state", pathState);
@@ -168,18 +203,20 @@ public class test extends CommandOpMode {
     }
 
     @Override
-    public void initialize() {
-        //CommandScheduler.getInstance().enable();
-        CommandScheduler.getInstance().reset();
+    public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
 
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap, FConstants.class, LConstants.class); /* Check Later */
-        OpModeReference.getInstance().initHardware(hardwareMap, new GamepadEx(gamepad1), new GamepadEx(gamepad2), telemetry, 0, 0 ,0);
-        CommandScheduler.getInstance().run();
         follower.setStartingPose(startPose);
         buildPaths();
+    }
+
+    @Override
+    public void start() {
+        opmodeTimer.resetTimer();
+        setPathState(0);
     }
 }

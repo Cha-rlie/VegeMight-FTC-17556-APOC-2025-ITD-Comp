@@ -47,6 +47,7 @@ public class Pitching extends SubsystemBase {
             put(RobotState.DEPOSITRELEASE, 0);
             put(RobotState.HOVERBEFOREGRAB, 830);
             put(RobotState.GRAB, 830);
+            put(RobotState.GRABCLOSE, 830);
             put(RobotState.HOVERAFTERGRAB, 830);
             put(RobotState.SPECHOVERBEFOREGRAB, 0);
             put(RobotState.SPECGRAB, 0);

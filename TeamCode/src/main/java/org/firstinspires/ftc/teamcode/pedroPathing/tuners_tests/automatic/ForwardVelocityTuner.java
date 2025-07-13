@@ -72,7 +72,7 @@ public class ForwardVelocityTuner extends OpMode {
      */
     @Override
     public void init() {
-Constants.setConstants(FConstants.class, LConstants.class);
+        Constants.setConstants(FConstants.class, LConstants.class);
         poseUpdater = new PoseUpdater(hardwareMap, FConstants.class, LConstants.class);
 
         leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);

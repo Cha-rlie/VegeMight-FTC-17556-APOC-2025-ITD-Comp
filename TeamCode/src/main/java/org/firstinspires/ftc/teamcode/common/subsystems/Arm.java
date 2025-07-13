@@ -39,6 +39,7 @@ public class Arm extends SubsystemBase {
             put(RobotState.DEPOSITRELEASE, 0.0);
             put(RobotState.HOVERBEFOREGRAB, 0.002);
             put(RobotState.GRAB, 0.08);
+            put(RobotState.GRABCLOSE, 0.08);
             put(RobotState.HOVERAFTERGRAB, 0.002);
             put(RobotState.SPECHOVERBEFOREGRAB, 0.0);
             put(RobotState.SPECGRAB, 0.0);

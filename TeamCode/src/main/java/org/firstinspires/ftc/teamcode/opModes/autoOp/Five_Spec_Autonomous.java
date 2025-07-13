@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
 
 @Autonomous(name="Five_Spec_Autonomous", group="Specimens")
-@Disabled
+
 
 public class Five_Spec_Autonomous extends OpMode {
     private Follower follower;

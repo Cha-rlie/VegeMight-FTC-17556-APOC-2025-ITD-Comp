@@ -1,20 +1,16 @@
 package org.firstinspires.ftc.teamcode.opModes.teleOp;
 
-import android.graphics.Path;
-
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.OpModeReference;
-import org.firstinspires.ftc.teamcode.common.util.Globals;
 import org.firstinspires.ftc.teamcode.common.util.RobotState;
 
 @TeleOp(name="TELEOP")
-public class FreshLiberty extends CommandOpMode {
+public class FreshLibrary extends CommandOpMode {
     GamepadEx gamePad1;
     GamepadEx gamePad2;
 
@@ -31,7 +27,7 @@ public class FreshLiberty extends CommandOpMode {
         // CROSS = A
         // SQUARE = X
 
-        // ---------------- BUTTON BINDINGS -------------------
+        // ---------------- BUTTON BINDINGS ------------------- //
         // State Machine
         gamePad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(OpModeReference.getInstance().globalsSubSystem.forwardsRobotState());
         gamePad1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(OpModeReference.getInstance().globalsSubSystem.backwardsRobotState());
@@ -61,8 +57,8 @@ public class FreshLiberty extends CommandOpMode {
         gamePad2.getGamepadButton(GamepadKeys.Button.X).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotLeft());
         gamePad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotRight());
 
-        gamePad1.getGamepadButton(GamepadKeys.Button.A).whenPressed(OpModeReference.getInstance().limelightSubsystem.extendLimelight());
-
+        gamePad1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(OpModeReference.getInstance().limelightSubsystem.storeLimelightValue());
+        gamePad1.getGamepadButton(GamepadKeys.Button.A).whenPressed(OpModeReference.getInstance().limelightSubsystem.extensionLimelight());
     }
 
     @Override

@@ -73,6 +73,11 @@ public class Lift extends SubsystemBase {
         OpModeReference.getInstance().getTelemetry().addData("Lift Target Position", motorLiftL.getTargetPosition());
         OpModeReference.getInstance().getTelemetry().addData("LS Pos", motorLiftL.getCurrentPosition());
         OpModeReference.getInstance().getTelemetry().addData("LS Power", motorLiftL.getPower());
+        OpModeReference.getInstance().getTelemetry().addData("LS Model", motorLiftL.getDeviceName());
+        OpModeReference.getInstance().getTelemetry().addData("RS Model", motorLiftR.getDeviceName());
+        OpModeReference.getInstance().getTelemetry().addData("RS Pos", motorLiftR.getCurrentPosition());
+        OpModeReference.getInstance().getTelemetry().addData("RS Power", motorLiftR.getPower());
+
         isBusy = true;
     }
 
@@ -109,13 +114,13 @@ public class Lift extends SubsystemBase {
                         case DEPOSIT:
                         case DEPOSITRELEASE:
                             if (!lowBasket) {
-                                RTP = 1300;
+                                RTP = 3200;
                             } else {RTP = 700;}
                             break;
                         case HOVERBEFOREGRAB:
                         case GRAB:
                         case HOVERAFTERGRAB:
-                            RTP = 250;
+                            RTP = 615;
                             break;
                         default:
                             RTP = 0;
@@ -128,13 +133,13 @@ public class Lift extends SubsystemBase {
     public InstantCommand adjustUp(){
         return new InstantCommand(()-> {
                     if (globals.getRobotState() == RobotState.DEPOSIT || globals.getRobotState() == RobotState.IDLE) {
-                        if ((RTP+adjustment) + 100 < 1500 /*CHANGE THIS NUMBER*/) {
+                        if ((RTP+adjustment) + 100 < 3300 /*CHANGE THIS NUMBER*/) {
                             adjustment += 100;
-                        } else {adjustment = 1500 - RTP;}
+                        } else {adjustment = 3300 - RTP;}
                     } else {
-                        if (RTP + adjustment + 100 < 800) {
+                        if (RTP + adjustment + 100 < 1970) {
                             adjustment += 100;
-                        } else {adjustment = 800 - RTP;}
+                        } else {adjustment = 1970 - RTP;}
                     }
                 });
     }

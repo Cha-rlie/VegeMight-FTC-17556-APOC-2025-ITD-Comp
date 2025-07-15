@@ -24,6 +24,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public void init(){
+        globals = OpModeReference.getInstance().globalsSubSystem;
         limelight.start();
     }
 
@@ -31,10 +32,11 @@ public class Limelight extends SubsystemBase {
         return new InstantCommand(()-> {
             LLResult result = limelight.getLatestResult();
             if (result != null) {
-                if (result.isValid() && globals.getRobotState()== RobotState.HOVERBEFOREGRAB) {
+                if (result.isValid())/* && globals.getRobotState()== RobotState.HOVERBEFOREGRAB)*/ {
                     OpModeReference.getInstance().getTelemetry().addData("Req ext",(((limelightHeight-sampleHeight)/Math.tan(Math.toRadians(limelightAngle-result.getTy())))-15.625)/0.0425);
                     OpModeReference.getInstance().getTelemetry().addData("ty", result.getTy());
                     OpModeReference.getInstance().liftSubSystem.adjustment = (int) ((((limelightHeight-sampleHeight)/Math.tan(Math.toRadians(limelightAngle-result.getTy())))-15.625)/0.0425)-OpModeReference.getInstance().liftSubSystem.RTP;
+                    OpModeReference.getInstance().getTelemetry().addData("Attempted extension",(int) ((((limelightHeight-sampleHeight)/Math.tan(Math.toRadians(limelightAngle-result.getTy())))-15.625)/0.0425)-OpModeReference.getInstance().liftSubSystem.RTP );
                 } else {
                     OpModeReference.getInstance().getTelemetry().addLine("Invalid Result");
                 }

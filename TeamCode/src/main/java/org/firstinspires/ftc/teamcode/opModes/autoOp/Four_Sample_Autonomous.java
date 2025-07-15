@@ -128,8 +128,8 @@ public class Four_Sample_Autonomous extends CommandOpMode {
             case 0: // Move from start to scoring position
                 follower.followPath(scorePreload);
                 setPathState(1);
-                OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT)
-                        .andThen(new WaitCommand(2000)).schedule();
+                OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT).schedule();
+                        //.andThen(new WaitCommand(2000)).schedule();
                 break;
 
             case 1: // Wait until the robot is near the scoring position
@@ -139,6 +139,7 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
                             .andThen(new WaitCommand(500))
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.HOVERBEFOREGRAB))
+                            .andThen(new WaitCommand(500))
                             .schedule();
                     follower.followPath(grabPickup1, true);
                     setPathState(2);
@@ -149,8 +150,9 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 if (!follower.isBusy() && !OpModeReference.getInstance().isBusy()) {
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRAB)
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRABCLOSE))
-                            .andThen(new WaitCommand(100))
+                            .andThen(new WaitCommand(300))
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE))
+                            .andThen(new WaitCommand(500))
                             .schedule();
                     follower.followPath(scorePickup1, true);
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT).schedule();

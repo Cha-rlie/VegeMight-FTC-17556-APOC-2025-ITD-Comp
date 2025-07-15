@@ -58,13 +58,13 @@ public class Intake extends SubsystemBase {
 
         stateToPositionMapForRot = new HashMap<RobotState, Double>() {{
             put(RobotState.INIT, 0.0);
-            put(RobotState.IDLE, 1.0);
-            put(RobotState.DEPOSIT, 1.0);
-            put(RobotState.DEPOSITRELEASE, 1.0);
-            put(RobotState.HOVERBEFOREGRAB, 0.50);
-            put(RobotState.GRAB, 1.0);
-            put(RobotState.GRABCLOSE, 1.0);
-            put(RobotState.HOVERAFTERGRAB, 1.0);
+            put(RobotState.IDLE, 0.0);
+            put(RobotState.DEPOSIT, 0.0);
+            put(RobotState.DEPOSITRELEASE, 0.0);
+            put(RobotState.HOVERBEFOREGRAB, 0.0);
+            put(RobotState.GRAB, 0.0);
+            put(RobotState.GRABCLOSE, 0.0);
+            put(RobotState.HOVERAFTERGRAB, 0.0);
             put(RobotState.SPECHOVERBEFOREGRAB, 0.0);
             put(RobotState.SPECGRAB, 0.0);
             put(RobotState.DEPOSITSPECIMEN, 0.0);

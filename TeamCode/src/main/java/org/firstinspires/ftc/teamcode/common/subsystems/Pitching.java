@@ -79,7 +79,7 @@ public class Pitching extends SubsystemBase {
             if (globals.updateRobotStateTrue && !globals.pitchAcceptState) {
                 if (stateToValueMap.containsKey(globals.getRobotState())) {
                     if (globals.getRobotState() == RobotState.IDLE) {
-                        if (globals.lastRobotState == RobotState.GRAB || globals.lastRobotState == RobotState.HOVERBEFOREGRAB || globals.lastRobotState == RobotState.HOVERAFTERGRAB) {
+                        if (globals.lastRobotState == RobotState.GRAB || globals.lastRobotState == RobotState.GRABCLOSE || globals.lastRobotState == RobotState.HOVERBEFOREGRAB || globals.lastRobotState == RobotState.HOVERAFTERGRAB) {
                             runToPos = stateToValueMap.get(globals.getRobotState());
                         }
                     } else {
@@ -115,7 +115,7 @@ public class Pitching extends SubsystemBase {
     private double gradualCalculatedPower() {
         double totalDistance = 830;
         double distanceLeft = globals.getRobotState() == RobotState.IDLE ? pitchingMotor.getCurrentPosition() : 830 - pitchingMotor.getCurrentPosition();
-        return Math.min(Math.pow(((distanceLeft + 830*0.4)/830),8) + 0.15, 1);
+        return Math.min(Math.pow(((distanceLeft + 830*0.37)/830),8) + 0.15, 1);
     }
 
     public boolean isBusy() {

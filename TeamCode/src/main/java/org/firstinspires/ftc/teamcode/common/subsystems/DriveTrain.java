@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.subsystems;
 
+import android.graphics.Path;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
@@ -9,6 +11,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.teamcode.common.OpModeReference;
+import org.firstinspires.ftc.teamcode.common.util.RobotState;
 
 public class DriveTrain extends SubsystemBase {
     public MotorEx FL;
@@ -35,15 +38,20 @@ public class DriveTrain extends SubsystemBase {
     public void periodic() {
         //driveTrain.driveRobotCentric(OpModeReference.getInstance().getGamePad1().getLeftX(), OpModeReference.getInstance().getGamePad1().getLeftY(), OpModeReference.getInstance().getGamePad1().getRightX());
         OpModeReference.getInstance().getTelemetry().addData("Velocity Adjuster", velocityAdjuster);
+        if (OpModeReference.getInstance().globalsSubSystem.getRobotState() == RobotState.HOVERBEFOREGRAB || OpModeReference.getInstance().globalsSubSystem.getRobotState() == RobotState.GRAB || OpModeReference.getInstance().globalsSubSystem.getRobotState() == RobotState.HOVERAFTERGRAB) {
+            velocityAdjuster = 0.7;
+        } else {
+            velocityAdjuster = 1;
+        }
     }
 
     public void driveRobotCentric(double x, double y, double rx) {
         driveTrain.driveRobotCentric(x*velocityAdjuster, y*velocityAdjuster, rx*velocityAdjuster, true);
     }
 
-    public void decreaseVelocity() {
+    public InstantCommand decreaseVelocity(double trigger) {
         // TODO: Make this dependent on states later
-        velocityAdjuster = 0.7;
+        return new InstantCommand(()-> velocityAdjuster = trigger > 0.5 ? 0.7 : 1);
     }
 }
 

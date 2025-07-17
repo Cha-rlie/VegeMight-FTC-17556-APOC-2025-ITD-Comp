@@ -43,7 +43,8 @@ public class Globals extends SubsystemBase {
             put(RobotState.DEPOSITRELEASE, RobotState.IDLE);
             put(RobotState.HOVERAFTERGRAB, RobotState.IDLE);
             put(RobotState.HOVERBEFOREGRAB, RobotState.GRAB);
-            put(RobotState.GRAB, RobotState.HOVERAFTERGRAB);
+            put(RobotState.GRAB, RobotState.GRABCLOSE);
+            put(RobotState.GRABCLOSE, RobotState.HOVERAFTERGRAB);
         }};
         goBackwardStateValuesOnly = new HashMap<RobotState, RobotState>() {{
             put(RobotState.IDLE, RobotState.HOVERBEFOREGRAB);
@@ -52,6 +53,7 @@ public class Globals extends SubsystemBase {
             put(RobotState.HOVERAFTERGRAB, RobotState.GRAB);
             put(RobotState.HOVERBEFOREGRAB, RobotState.IDLE);
             put(RobotState.GRAB, RobotState.HOVERBEFOREGRAB);
+            put(RobotState.GRABCLOSE, RobotState.HOVERBEFOREGRAB);
         }};
         // For Specimen Mode
         goForwardStateValuesOnlyForSpec = new HashMap<RobotState, RobotState>() {{
@@ -122,13 +124,23 @@ public class Globals extends SubsystemBase {
     }
 
     @NonNull
+    public InstantCommand park() {
+        return new InstantCommand(()->{
+            updateRobotStateTrue=true;
+            resetAllSubsystemAcceptance();
+            lastRobotState=robotState;
+            robotState=RobotState.PARKNOASCENT;
+        });
+    }
+
+    @NonNull
     public InstantCommand forwardsRobotState() {
         return new InstantCommand(()-> {
                             updateRobotStateTrue = true;
                             resetAllSubsystemAcceptance();
                             lastRobotState = robotState;
                             if (!backwardsMode) {
-                                robotState = goForwardStateValuesOnly.get(getRobotState());
+                                robotState = isSampleModeTrue ? goForwardStateValuesOnly.get(getRobotState()) : goForwardStateValuesOnlyForSpec.get(getRobotState());
                             } else {robotState = goForwardStateForBackwardModeValuesOnly.get(getRobotState());}
                         }
                     /*getTelemetry().addLine("FORWARDS!!!!!!!!!!!!!!");
@@ -147,7 +159,7 @@ public class Globals extends SubsystemBase {
                             resetAllSubsystemAcceptance();
                             lastRobotState = robotState;
                             if (!backwardsMode) {
-                                robotState = goBackwardStateValuesOnly.get(getRobotState());
+                                robotState = isSampleModeTrue ? goBackwardStateValuesOnly.get(getRobotState()) : goBackwardStateValuesOnlyForSpec.get(getRobotState());
                             } else {
                                 robotState = goBackwardStateForBackwardModeValuesOnly.get(getRobotState());
                             }
@@ -165,19 +177,33 @@ public class Globals extends SubsystemBase {
     public InstantCommand goToIdle() {
         return new InstantCommand(()-> {
                     if (robotState != RobotState.IDLE) {
+                        lastRobotState = robotState;
                         robotState = RobotState.IDLE;
+                        updateRobotStateTrue = true;
+                        resetAllSubsystemAcceptance();
                     }
                 });
     }
 
-    public InstantCommand toggleSampleSpecimenModes() {
+    public InstantCommand goToInit() {
+        return new InstantCommand(()->{
+            lastRobotState = RobotState.INIT;
+            robotState = RobotState.INIT;
+            updateRobotStateTrue = true;
+            resetAllSubsystemAcceptance();
+        });
+    }
+
+    public InstantCommand toggleSampleSpecimenModes(double triggerValue) {
         return new InstantCommand(() -> {
-           if (robotState == RobotState.IDLE) {
-               isSampleModeTrue = !isSampleModeTrue;
-           } else if (robotState == RobotState.DEPOSITRELEASE) {
-               goToIdle().execute();
-               isSampleModeTrue = !isSampleModeTrue;
-           }
+           if (triggerValue > 0.5) {
+                if (robotState == RobotState.IDLE) {
+                   isSampleModeTrue = !isSampleModeTrue;
+               } else if (robotState == RobotState.DEPOSITRELEASE) {
+                   goToIdle().schedule();
+                   isSampleModeTrue = !isSampleModeTrue;
+               }
+            }
         });
     }
 
@@ -198,9 +224,11 @@ public class Globals extends SubsystemBase {
     }
 
     @NonNull
-    public InstantCommand parkNoAscent(){
+    public InstantCommand parkNoAscent(double rightTrigger){
         return new InstantCommand(()->{
-                    robotState = RobotState.PARKNOASCENT;
+                    if (rightTrigger > 0.5) {
+                        robotState = RobotState.PARKNOASCENT;
+                    }
                 });
     }
 

@@ -39,17 +39,17 @@ public class Intake extends SubsystemBase {
         clawGripper = OpModeReference.getInstance().getHardwareMap().get(Servo.class, "G");
 
         stateToPositionMapForWrist = new HashMap<RobotState, Double>() {{
-            put(RobotState.INIT, 0.7);
+            put(RobotState.INIT, 0.48);
             put(RobotState.IDLE, 0.06);
-            put(RobotState.DEPOSIT, 0.0);
-            put(RobotState.DEPOSITRELEASE, 0.0);
-            put(RobotState.HOVERBEFOREGRAB, 0.56);
-            put(RobotState.GRAB, 0.68);
-            put(RobotState.GRABCLOSE, 0.68);
-            put(RobotState.HOVERAFTERGRAB, 0.56);
-            put(RobotState.SPECHOVERBEFOREGRAB, 0.0);
-            put(RobotState.SPECGRAB, 0.0);
-            put(RobotState.DEPOSITSPECIMEN, 0.0);
+            put(RobotState.DEPOSIT, 0.36);
+            put(RobotState.DEPOSITRELEASE, 0.36);
+            put(RobotState.HOVERBEFOREGRAB, 0.89);
+            put(RobotState.GRAB, 0.91);
+            put(RobotState.GRABCLOSE, 0.91);
+            put(RobotState.HOVERAFTERGRAB, 0.89);
+            put(RobotState.SPECHOVERBEFOREGRAB, 0.32);
+            put(RobotState.SPECGRAB, 0.32);
+            put(RobotState.DEPOSITSPECIMEN, 0.24);
             put(RobotState.BACKWARDGRAB, 0.052);
             put(RobotState.BACKWARDHOVERAFTERGRAB, 0.052);
             put(RobotState.BACKWARDHOVERBEFOREGRAB, 0.052);
@@ -101,9 +101,9 @@ public class Intake extends SubsystemBase {
                     case DEPOSITRELEASE:
                         clawOpen = true;
                         break;
-                    case GRABCLOSE:
+                    case GRAB:
                         clawOpen = true;
-                        new WaitCommand(700).andThen(new RunCommand(() -> clawOpen = false)).schedule();
+                        break;
                     default:
                         clawOpen = false;
                         break;
@@ -123,7 +123,7 @@ public class Intake extends SubsystemBase {
             clawRot.setPosition(rotPosition + rotAdjustment);
             if (clawOpen) {
                 clawGripper.setPosition(0.75);
-            } else {clawGripper.setPosition(0.97);}
+            } else {clawGripper.setPosition(1);}
         }, this);
     }
 
@@ -167,6 +167,10 @@ public class Intake extends SubsystemBase {
             rotAdjustment = 0;
             OpModeReference.getInstance().getTelemetry().addLine("Arm Adjustment Reset");
         });
+    }
+
+    public InstantCommand setWrist(double newValue) {
+        return new InstantCommand(()->wristPosition = newValue);
     }
 
     public boolean isBusy() {return isBusy;}

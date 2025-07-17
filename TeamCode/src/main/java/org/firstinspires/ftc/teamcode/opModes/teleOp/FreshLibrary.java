@@ -40,8 +40,8 @@ public class FreshLibrary extends CommandOpMode {
         // Manual Adjustments
         gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustUp());
         gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustDown());
-        gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustUp());
-        gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustDown());
+        gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustUpSmall());
+        gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustDownSmall());
 
         gamePad1.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(OpModeReference.getInstance().intakeSubSystem.toggleClaw());
         gamePad2.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(OpModeReference.getInstance().intakeSubSystem.toggleClaw());
@@ -57,8 +57,8 @@ public class FreshLibrary extends CommandOpMode {
         gamePad2.getGamepadButton(GamepadKeys.Button.X).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotLeft());
         gamePad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotRight());
 
-        gamePad1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(OpModeReference.getInstance().limelightSubsystem.storeLimelightValue());
-        gamePad1.getGamepadButton(GamepadKeys.Button.A).whenPressed(OpModeReference.getInstance().limelightSubsystem.extensionLimelight());
+        //gamePad1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(OpModeReference.getInstance().limelightSubsystem.storeLimelightValue());
+        //gamePad1.getGamepadButton(GamepadKeys.Button.A).whenPressed(OpModeReference.getInstance().limelightSubsystem.extensionLimelight());
     }
 
     @Override
@@ -66,6 +66,9 @@ public class FreshLibrary extends CommandOpMode {
         CommandScheduler.getInstance().run();
         //new InstantCommand(() -> OpModeReference.getInstance().driveTrainSubSystem.inputJoySticks(gamePad1.getLeftX(), gamePad1.getLeftY(), gamePad1.getRightX())).schedule();
         OpModeReference.getInstance().driveTrainSubSystem.driveRobotCentric(gamePad1.getLeftX(), gamePad1.getLeftY(), gamePad1.getRightX());
+        OpModeReference.getInstance().driveTrainSubSystem.decreaseVelocity(gamePad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)).schedule();
+        OpModeReference.getInstance().globalsSubSystem.toggleSampleSpecimenModes(gamePad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)).schedule();
+        OpModeReference.getInstance().globalsSubSystem.parkNoAscent(gamePad2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)).schedule();
         telemetry.update();
     }
 }

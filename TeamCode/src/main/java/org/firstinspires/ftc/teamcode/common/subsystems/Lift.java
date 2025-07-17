@@ -102,25 +102,27 @@ public class Lift extends SubsystemBase {
     public InstantCommand updatePosFromState() {
         return new InstantCommand(() -> {
                     globals.liftAcceptState = true;
-                    if (globals.getRobotState() == RobotState.HOVERBEFOREGRAB || globals.getRobotState() == RobotState.GRAB || globals.getRobotState() == RobotState.HOVERAFTERGRAB) {
-                        if (globals.lastRobotState == RobotState.GRAB || globals.lastRobotState == RobotState.HOVERBEFOREGRAB || globals.lastRobotState == RobotState.HOVERAFTERGRAB) {
+                    if (globals.getRobotState() == RobotState.HOVERBEFOREGRAB || globals.getRobotState() == RobotState.GRAB || globals.getRobotState() == RobotState.HOVERAFTERGRAB || globals.getRobotState()==RobotState.GRABCLOSE) {
+                        if (globals.lastRobotState == RobotState.GRAB || globals.lastRobotState == RobotState.HOVERBEFOREGRAB || globals.lastRobotState == RobotState.HOVERAFTERGRAB || globals.getRobotState()==RobotState.GRABCLOSE) {
                             adjustment = adjustment;
                         } else {adjustment = 0;}
                     } else {adjustment = 0;}
                     switch (globals.getRobotState()) {
-                        case IDLE:
-                            RTP = 0;
-                            break;
                         case DEPOSIT:
                         case DEPOSITRELEASE:
                             if (!lowBasket) {
-                                RTP = 3200;
-                            } else {RTP = 700;}
+                                RTP = 3400;
+                            } else {RTP = 1700;}
                             break;
+                        case IDLE:
                         case HOVERBEFOREGRAB:
                         case GRAB:
+                        case GRABCLOSE:
                         case HOVERAFTERGRAB:
                             RTP = 615;
+                            break;
+                        case DEPOSITSPECIMEN:
+                            RTP = 700;
                             break;
                         default:
                             RTP = 0;
@@ -133,26 +135,51 @@ public class Lift extends SubsystemBase {
     public InstantCommand adjustUp(){
         return new InstantCommand(()-> {
                     if (globals.getRobotState() == RobotState.DEPOSIT || globals.getRobotState() == RobotState.IDLE) {
-                        if ((RTP+adjustment) + 100 < 3300 /*CHANGE THIS NUMBER*/) {
-                            adjustment += 100;
-                        } else {adjustment = 3300 - RTP;}
+                        if ((RTP+adjustment) + 200 < 3500 /*CHANGE THIS NUMBER*/) {
+                            adjustment += 200;
+                        } else {adjustment = 3500 - RTP;}
                     } else {
-                        if (RTP + adjustment + 100 < 1970) {
-                            adjustment += 100;
-                        } else {adjustment = 1970 - RTP;}
+                        if (RTP + adjustment + 200 < 1670) {
+                            adjustment += 200;
+                        } else {adjustment = 1670 - RTP;}
                     }
                 });
+    }
+
+    public InstantCommand adjustUpSmall(){
+        return new InstantCommand(()-> {
+            if (globals.getRobotState() == RobotState.DEPOSIT || globals.getRobotState() == RobotState.IDLE) {
+                if ((RTP+adjustment) + 100 < 3500 /*CHANGE THIS NUMBER*/) {
+                    adjustment += 100;
+                } else {adjustment = 3300 - RTP;}
+            } else {
+                if (RTP + adjustment + 100 < 1670) {
+                    adjustment += 100;
+                } else {adjustment = 1670 - RTP;}
+            }
+        });
     }
 
     @NonNull
     public InstantCommand adjustDown(){
         return new InstantCommand(()-> {
-                    if (RTP + adjustment - 100 > 0) {
-                        adjustment -= 100;
+                    if (RTP + adjustment - 200 > 0) {
+                        adjustment -= 200;
                     } else {
                         adjustment = -RTP;
                     }
                 });
+    }
+
+    @NonNull
+    public InstantCommand adjustDownSmall(){
+        return new InstantCommand(()-> {
+            if (RTP + adjustment - 100 > 0) {
+                adjustment -= 100;
+            } else {
+                adjustment = -RTP;
+            }
+        });
     }
 
     public InstantCommand toggleLowBasket() {

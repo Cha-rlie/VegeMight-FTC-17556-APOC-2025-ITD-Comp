@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.common.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.common.subsystems.Flag;
 import org.firstinspires.ftc.teamcode.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.common.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.common.subsystems.Limelight;
@@ -27,6 +28,7 @@ public class OpModeReference {
     public Pitching pitchingSubSystem;
     public Intake intakeSubSystem;
     public Limelight limelightSubsystem;
+    public Flag flagSubSystem;
 
 
     public static OpModeReference getInstance() {
@@ -47,6 +49,7 @@ public class OpModeReference {
         pitchingSubSystem = new Pitching();
         intakeSubSystem = new Intake();
         limelightSubsystem = new Limelight();
+        flagSubSystem = new Flag();
     }
 
     public void nullify() {

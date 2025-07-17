@@ -35,13 +35,13 @@ public class Arm extends SubsystemBase {
         rightArm.setDirection(Servo.Direction.REVERSE);
 
         stateToPositionMap = new HashMap<RobotState, Double>() {{
-            put(RobotState.INIT, 0.05);
+            put(RobotState.INIT, 0.23);
             put(RobotState.IDLE, 0.11);
             put(RobotState.DEPOSIT, 0.0);
             put(RobotState.DEPOSITRELEASE, 0.0);
             put(RobotState.HOVERBEFOREGRAB, 0.002);
-            put(RobotState.GRAB, 0.08);
-            put(RobotState.GRABCLOSE, 0.08);
+            put(RobotState.GRAB, 0.03);
+            put(RobotState.GRABCLOSE, 0.03);
             put(RobotState.HOVERAFTERGRAB, 0.002);
             put(RobotState.SPECHOVERBEFOREGRAB, 0.0);
             put(RobotState.SPECGRAB, 0.0);
@@ -103,6 +103,10 @@ public class Arm extends SubsystemBase {
                     adjustment = 0;
                     OpModeReference.getInstance().getTelemetry().addLine("Arm Adjustment Reset");
                 });
+    }
+
+    public InstantCommand setArm(double newValue) {
+        return new InstantCommand(()-> armPosition = newValue);
     }
 
     public boolean isBusy() {return isBusy;}

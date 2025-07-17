@@ -20,13 +20,16 @@ public class Limelight extends SubsystemBase {
     double possibleadjustmentValue =0;
     int storedadjustmentValue=0;
 
-    Globals globals;
     public Limelight() {
         limelight = OpModeReference.getInstance().getHardwareMap().get(Limelight3A.class, "limelight");
     }
 
+    @Override
+    public void periodic() {
+        OpModeReference.getInstance().getTelemetry().addData("Required Total LL Extension", requiredTotalExtension);
+    }
+
     public void init(){
-        globals = OpModeReference.getInstance().globalsSubSystem;
         limelight.start();
     }
 
@@ -55,7 +58,7 @@ public class Limelight extends SubsystemBase {
 
     public InstantCommand extensionLimelight(){
         return new InstantCommand(()-> {
-            if (globals.getRobotState()== RobotState.HOVERBEFOREGRAB) {
+            if (OpModeReference.getInstance().globalsSubSystem.getRobotState() == RobotState.HOVERBEFOREGRAB) {
                 OpModeReference.getInstance().liftSubSystem.adjustment = storedadjustmentValue;
             }
         });

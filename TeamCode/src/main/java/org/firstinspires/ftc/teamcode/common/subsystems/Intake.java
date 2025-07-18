@@ -41,8 +41,8 @@ public class Intake extends SubsystemBase {
         stateToPositionMapForWrist = new HashMap<RobotState, Double>() {{
             put(RobotState.INIT, 0.48);
             put(RobotState.IDLE, 0.06);
-            put(RobotState.DEPOSIT, 0.36);
-            put(RobotState.DEPOSITRELEASE, 0.36);
+            put(RobotState.DEPOSIT, 0.0);
+            put(RobotState.DEPOSITRELEASE, 0.0);
             put(RobotState.HOVERBEFOREGRAB, 0.89);
             put(RobotState.GRAB, 0.91);
             put(RobotState.GRABCLOSE, 0.91);
@@ -54,6 +54,7 @@ public class Intake extends SubsystemBase {
             put(RobotState.BACKWARDHOVERAFTERGRAB, 0.052);
             put(RobotState.BACKWARDHOVERBEFOREGRAB, 0.052);
             put(RobotState.BACKWARDSCORE, 0.60);
+            put(RobotState.PARKNOASCENT, 0.48);
         }};
 
         stateToPositionMapForRot = new HashMap<RobotState, Double>() {{
@@ -72,6 +73,7 @@ public class Intake extends SubsystemBase {
             put(RobotState.BACKWARDHOVERAFTERGRAB, 0.052);
             put(RobotState.BACKWARDHOVERBEFOREGRAB, 0.052);
             put(RobotState.BACKWARDSCORE, 0.60);
+            put(RobotState.PARKNOASCENT, 1.0);
         }};
 
         globals = OpModeReference.getInstance().globalsSubSystem;
@@ -108,8 +110,8 @@ public class Intake extends SubsystemBase {
                         clawOpen = false;
                         break;
                 }
-                if (globals.getRobotState() == RobotState.HOVERBEFOREGRAB || globals.getRobotState() == RobotState.GRAB || globals.getRobotState() == RobotState.HOVERAFTERGRAB) {
-                    if (globals.lastRobotState == RobotState.HOVERBEFOREGRAB || globals.lastRobotState == RobotState.GRAB || globals.lastRobotState == RobotState.HOVERAFTERGRAB) {
+                if (globals.getRobotState() == RobotState.HOVERBEFOREGRAB || globals.getRobotState() == RobotState.GRAB || globals.getRobotState() == RobotState.HOVERAFTERGRAB || globals.getRobotState() == RobotState.GRABCLOSE) {
+                    if (globals.lastRobotState == RobotState.HOVERBEFOREGRAB || globals.lastRobotState == RobotState.GRAB || globals.lastRobotState == RobotState.HOVERAFTERGRAB || globals.getRobotState() == RobotState.GRABCLOSE) {
                         rotAdjustment = rotAdjustment;
                         wristAdjustment = wristAdjustment;
                     } else {
@@ -122,8 +124,8 @@ public class Intake extends SubsystemBase {
             wrist.setPosition(wristPosition + wristAdjustment);
             clawRot.setPosition(rotPosition + rotAdjustment);
             if (clawOpen) {
-                clawGripper.setPosition(0.75);
-            } else {clawGripper.setPosition(1);}
+                clawGripper.setPosition(0.35);
+            } else {clawGripper.setPosition(0.52);}
         }, this);
     }
 

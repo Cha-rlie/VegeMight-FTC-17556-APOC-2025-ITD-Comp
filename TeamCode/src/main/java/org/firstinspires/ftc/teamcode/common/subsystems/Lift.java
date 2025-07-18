@@ -124,6 +124,9 @@ public class Lift extends SubsystemBase {
                         case DEPOSITSPECIMEN:
                             RTP = 700;
                             break;
+                        case PARKNOASCENT:
+                            RTP = 1700;
+                            break;
                         default:
                             RTP = 0;
                             break;

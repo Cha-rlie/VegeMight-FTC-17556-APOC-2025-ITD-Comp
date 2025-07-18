@@ -35,21 +35,22 @@ public class Arm extends SubsystemBase {
         rightArm.setDirection(Servo.Direction.REVERSE);
 
         stateToPositionMap = new HashMap<RobotState, Double>() {{
-            put(RobotState.INIT, 0.23);
-            put(RobotState.IDLE, 0.11);
-            put(RobotState.DEPOSIT, 0.0);
-            put(RobotState.DEPOSITRELEASE, 0.0);
-            put(RobotState.HOVERBEFOREGRAB, 0.002);
-            put(RobotState.GRAB, 0.03);
-            put(RobotState.GRABCLOSE, 0.03);
-            put(RobotState.HOVERAFTERGRAB, 0.002);
-            put(RobotState.SPECHOVERBEFOREGRAB, 0.0);
-            put(RobotState.SPECGRAB, 0.0);
-            put(RobotState.DEPOSITSPECIMEN, 0.0);
+            put(RobotState.INIT, 0.48);
+            put(RobotState.IDLE, 0.33);
+            put(RobotState.DEPOSIT, 0.33);
+            put(RobotState.DEPOSITRELEASE, 0.33);
+            put(RobotState.HOVERBEFOREGRAB, 0.212);
+            put(RobotState.GRAB, 0.28);
+            put(RobotState.GRABCLOSE, 0.28);
+            put(RobotState.HOVERAFTERGRAB, 0.212);
+            put(RobotState.SPECHOVERBEFOREGRAB, 0.21);
+            put(RobotState.SPECGRAB, 0.21);
+            put(RobotState.DEPOSITSPECIMEN, 0.45);
             put(RobotState.BACKWARDGRAB, 0.052);
             put(RobotState.BACKWARDHOVERAFTERGRAB, 0.052);
             put(RobotState.BACKWARDHOVERBEFOREGRAB, 0.052);
             put(RobotState.BACKWARDSCORE, 0.60);
+            put(RobotState.PARKNOASCENT, 0.54);
         }};
 
         globals = OpModeReference.getInstance().globalsSubSystem;

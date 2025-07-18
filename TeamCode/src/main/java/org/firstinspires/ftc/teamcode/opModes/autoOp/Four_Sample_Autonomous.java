@@ -51,7 +51,6 @@ public class Four_Sample_Autonomous extends CommandOpMode {
 
     private final Pose parkPose = new Pose(60, 95, Math.toRadians(90));    // Parking position
     private final Pose parkControlPose = new Pose(60, 120); // Control point for curved path
-
     // Declare paths and pathchains
     private Path scorePreload;
     private PathChain grabPickup1, grabPickup2, grabPickup3, scorePickup1, scorePickup2, scorePickup3, park;
@@ -126,8 +125,9 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 .build();
         park = follower.pathBuilder()
                 .addPath(
-                        new BezierLine(
+                        new BezierCurve(
                                 new Point(14.700, 128.800, Point.CARTESIAN),
+                                new Point (73, 135, Point.CARTESIAN),
                                 new Point(57, 93, Point.CARTESIAN)
                         )
                 )
@@ -142,12 +142,13 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 follower.followPath(scorePreload);
                 setPathState(1);
                 OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT)
-                        .andThen(OpModeReference.getInstance().intakeSubSystem.setWrist(0.3))
-                        .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.09))
-                        .andThen(new WaitCommand(1000))
-                        .andThen(new InstantCommand(()->OpModeReference.getInstance().intakeSubSystem.setWrist(0.36)))
-                        .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.09))
-                        .andThen(new WaitCommand(200))
+                        .andThen(OpModeReference.getInstance().intakeSubSystem.setWrist(0.39))
+                        .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.33))
+                        .andThen(new WaitUntilCommand(() -> !OpModeReference.getInstance().isBusy()))
+                        .andThen(new WaitCommand(100))
+                        .andThen(new InstantCommand(()->OpModeReference.getInstance().intakeSubSystem.setWrist(0.48)))
+                        .andThen(OpModeReference.getInstance().intakeSubSystem.setWrist(0.0))
+                        .andThen(new WaitCommand(500))
                         .andThen(OpModeReference.getInstance().intakeSubSystem.toggleClaw())
                         .andThen(new WaitCommand(500))
                         .andThen(new InstantCommand(()-> readyForNext = true))
@@ -158,16 +159,20 @@ public class Four_Sample_Autonomous extends CommandOpMode {
             case 1: // Wait until the robot is near the scoring position
                 if (!follower.isBusy() && !OpModeReference.getInstance().isBusy() && readyForNext) {
                     readyForNext = false;
-                            OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE)
-                            .andThen(new WaitUntilCommand(() -> !OpModeReference.getInstance().isBusy()))
-                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.HOVERBEFOREGRAB))
-                            .andThen(new WaitUntilCommand(() -> !OpModeReference.getInstance().isBusy()))
-                            .andThen(new WaitCommand(1000))
-                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRAB))
-                            .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRABCLOSE))
-                            .andThen(new WaitCommand(700))
-                            .andThen(new InstantCommand(()-> readyForNext = true))
-                            .schedule();
+                    OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE)
+                        .andThen(new WaitUntilCommand(() -> !OpModeReference.getInstance().isBusy()))
+                        .andThen(new WaitUntilCommand(() -> !OpModeReference.getInstance().isBusy()))
+                        .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.HOVERBEFOREGRAB))
+                        .andThen(OpModeReference.getInstance().liftSubSystem.adjustUp())
+                        .andThen(OpModeReference.getInstance().liftSubSystem.adjustUp())
+                        .andThen(OpModeReference.getInstance().liftSubSystem.adjustUp())
+                        .andThen(new WaitUntilCommand(() -> !OpModeReference.getInstance().isBusy()))
+                        .andThen(new WaitCommand(1000))
+                        .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRAB))
+                        .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.GRABCLOSE))
+                        .andThen(new WaitCommand(700))
+                        .andThen(new InstantCommand(()-> readyForNext = true))
+                        .schedule();
                     follower.followPath(grabPickup1, true);
                     setPathState(2);
                 }
@@ -177,12 +182,16 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 if (!follower.isBusy() && !OpModeReference.getInstance().isBusy() && readyForNext) {
                     readyForNext = false;
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE)
-                            .andThen(new WaitUntilCommand(() -> !OpModeReference.getInstance().isBusy()))
                             .andThen(new WaitCommand(500))
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT))
-                            .andThen(OpModeReference.getInstance().intakeSubSystem.setWrist(0.3))
-                            .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.09))
+                            .andThen(OpModeReference.getInstance().intakeSubSystem.setWrist(0.35))
+                            .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.11))
                             .andThen(new WaitCommand(1000))
+                            .andThen(new InstantCommand(()->OpModeReference.getInstance().intakeSubSystem.setWrist(0.48)))
+                            .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.09))
+                            .andThen(new WaitCommand(500))
+                            .andThen(OpModeReference.getInstance().intakeSubSystem.toggleClaw())
+                            .andThen(new WaitCommand(500))
                             .andThen(new InstantCommand(()-> readyForNext = true))
                             .schedule();
                     follower.followPath(scorePickup1, true);
@@ -217,12 +226,16 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 if (!follower.isBusy() && !OpModeReference.getInstance().isBusy() && readyForNext) {
                     readyForNext = false;
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE)
-                            .andThen(new WaitUntilCommand(() -> !OpModeReference.getInstance().isBusy()))
                             .andThen(new WaitCommand(500))
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT))
-                            .andThen(OpModeReference.getInstance().intakeSubSystem.setWrist(0.3))
-                            .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.09))
+                            .andThen(OpModeReference.getInstance().intakeSubSystem.setWrist(0.35))
+                            .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.11))
                             .andThen(new WaitCommand(1000))
+                            .andThen(new InstantCommand(()->OpModeReference.getInstance().intakeSubSystem.setWrist(0.48)))
+                            .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.09))
+                            .andThen(new WaitCommand(500))
+                            .andThen(OpModeReference.getInstance().intakeSubSystem.toggleClaw())
+                            .andThen(new WaitCommand(500))
                             .andThen(new InstantCommand(()-> readyForNext = true))
                             .schedule();
                     follower.followPath(scorePickup2, true);
@@ -257,12 +270,16 @@ public class Four_Sample_Autonomous extends CommandOpMode {
                 if (!follower.isBusy() && !OpModeReference.getInstance().isBusy() && readyForNext) {
                     readyForNext = false;
                     OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.IDLE)
-                            .andThen(new WaitUntilCommand(() -> !OpModeReference.getInstance().isBusy()))
                             .andThen(new WaitCommand(500))
                             .andThen(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.DEPOSIT))
-                            .andThen(OpModeReference.getInstance().intakeSubSystem.setWrist(0.3))
-                            .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.09))
+                            .andThen(OpModeReference.getInstance().intakeSubSystem.setWrist(0.35))
+                            .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.11))
                             .andThen(new WaitCommand(1000))
+                            .andThen(new InstantCommand(()->OpModeReference.getInstance().intakeSubSystem.setWrist(0.48)))
+                            .andThen(OpModeReference.getInstance().armSubSystem.setArm(0.09))
+                            .andThen(new WaitCommand(500))
+                            .andThen(OpModeReference.getInstance().intakeSubSystem.toggleClaw())
+                            .andThen(new WaitCommand(500))
                             .andThen(new InstantCommand(()-> readyForNext = true))
                             .schedule();
                     follower.followPath(scorePickup3, true);
@@ -300,7 +317,6 @@ public class Four_Sample_Autonomous extends CommandOpMode {
         pathState = pState;
         pathTimer.resetTimer();
     }
-
 
     @Override
     public void run() {

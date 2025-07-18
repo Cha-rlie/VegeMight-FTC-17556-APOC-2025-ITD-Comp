@@ -115,7 +115,7 @@ public class Pitching extends SubsystemBase {
     private double gradualCalculatedPower() {
         double totalDistance = 830;
         double distanceLeft = globals.getRobotState() == RobotState.IDLE ? pitchingMotor.getCurrentPosition() : 830 - pitchingMotor.getCurrentPosition();
-        return Math.min(Math.pow(((distanceLeft + 830*0.37)/830),8) + 0.15, 1);
+        return Math.min(Math.pow(((distanceLeft + 830*0.33)/830),8) + 0.15, 1);
     }
 
     public boolean isBusy() {

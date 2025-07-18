@@ -22,6 +22,7 @@ public class Globals extends SubsystemBase {
     public boolean pitchAcceptState = false;
     public boolean armAcceptState = false;
     public boolean intakeAcceptState = false;
+    private boolean notPressedBefore;
 
     // Declare the global variables
     private RobotState robotState;
@@ -36,6 +37,8 @@ public class Globals extends SubsystemBase {
 
     // Constructor that builds the drivetrain subsystem class and Hashmaps :D
     public Globals() {
+        isSampleModeTrue = true;
+        notPressedBefore = true;
         goForwardStateValuesOnly = new HashMap<RobotState, RobotState>() {{
             put(RobotState.IDLE, RobotState.DEPOSIT);
             put(RobotState.REJECT, RobotState.HOVERBEFOREGRAB);
@@ -197,13 +200,20 @@ public class Globals extends SubsystemBase {
     public InstantCommand toggleSampleSpecimenModes(double triggerValue) {
         return new InstantCommand(() -> {
            if (triggerValue > 0.5) {
-                if (robotState == RobotState.IDLE) {
-                   isSampleModeTrue = !isSampleModeTrue;
-               } else if (robotState == RobotState.DEPOSITRELEASE) {
-                   goToIdle().schedule();
-                   isSampleModeTrue = !isSampleModeTrue;
+               if (notPressedBefore == true) {
+                   if (robotState == RobotState.IDLE) {
+                       isSampleModeTrue = !isSampleModeTrue;
+                   } else if (robotState == RobotState.DEPOSITRELEASE) {
+                       goToIdle().schedule();
+                       isSampleModeTrue = !isSampleModeTrue;
+                   }
+                   notPressedBefore = false;
                }
-            }
+            } else {
+               if (triggerValue < 0.1) {
+                   notPressedBefore = true;
+               }
+           }
         });
     }
 

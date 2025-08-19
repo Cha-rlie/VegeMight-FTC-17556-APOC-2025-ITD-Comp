@@ -55,7 +55,7 @@ public class Limelight extends SubsystemBase {
 
     public InstantCommand extensionLimelight(){
         return new InstantCommand(()-> {
-            if (globals.getRobotState()== RobotState.HOVERBEFOREGRAB) {
+            if (globals.getRobotState() == RobotState.HOVERBEFOREGRAB) {
                 OpModeReference.getInstance().liftSubSystem.adjustment = storedadjustmentValue;
             }
         });

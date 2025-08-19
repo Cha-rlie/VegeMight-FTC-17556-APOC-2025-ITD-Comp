@@ -37,7 +37,7 @@ public class Arm extends SubsystemBase {
         stateToPositionMap = new HashMap<RobotState, Double>() {{
             put(RobotState.INIT, 0.05);
             put(RobotState.IDLE, 0.11);
-            put(RobotState.DEPOSIT, 0.0);
+            put(RobotState.DEPOSIT, 0.03);
             put(RobotState.DEPOSITRELEASE, 0.0);
             put(RobotState.HOVERBEFOREGRAB, 0.002);
             put(RobotState.GRAB, 0.08);

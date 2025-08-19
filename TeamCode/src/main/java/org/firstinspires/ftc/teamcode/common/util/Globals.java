@@ -43,7 +43,8 @@ public class Globals extends SubsystemBase {
             put(RobotState.DEPOSITRELEASE, RobotState.IDLE);
             put(RobotState.HOVERAFTERGRAB, RobotState.IDLE);
             put(RobotState.HOVERBEFOREGRAB, RobotState.GRAB);
-            put(RobotState.GRAB, RobotState.HOVERAFTERGRAB);
+            put(RobotState.GRAB, RobotState.GRABCLOSE);
+            put(RobotState.GRABCLOSE, RobotState.HOVERAFTERGRAB);
         }};
         goBackwardStateValuesOnly = new HashMap<RobotState, RobotState>() {{
             put(RobotState.IDLE, RobotState.HOVERBEFOREGRAB);

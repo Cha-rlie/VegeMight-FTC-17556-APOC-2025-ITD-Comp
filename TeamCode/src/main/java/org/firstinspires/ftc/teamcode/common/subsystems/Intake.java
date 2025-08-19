@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase {
         stateToPositionMapForWrist = new HashMap<RobotState, Double>() {{
             put(RobotState.INIT, 0.7);
             put(RobotState.IDLE, 0.06);
-            put(RobotState.DEPOSIT, 0.0);
+            put(RobotState.DEPOSIT, 0.27);
             put(RobotState.DEPOSITRELEASE, 0.0);
             put(RobotState.HOVERBEFOREGRAB, 0.56);
             put(RobotState.GRAB, 0.68);
@@ -122,7 +122,7 @@ public class Intake extends SubsystemBase {
             wrist.setPosition(wristPosition + wristAdjustment);
             clawRot.setPosition(rotPosition + rotAdjustment);
             if (clawOpen) {
-                clawGripper.setPosition(0.75);
+                clawGripper.setPosition(0.73);
             } else {clawGripper.setPosition(0.97);}
         }, this);
     }

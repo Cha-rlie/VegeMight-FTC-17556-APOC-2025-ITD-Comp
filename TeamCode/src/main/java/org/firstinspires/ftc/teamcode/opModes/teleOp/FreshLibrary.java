@@ -35,30 +35,10 @@ public class FreshLibrary extends CommandOpMode {
         gamePad2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(OpModeReference.getInstance().globalsSubSystem.backwardsRobotState());
         gamePad1.getGamepadButton(GamepadKeys.Button.START).whenPressed(OpModeReference.getInstance().globalsSubSystem.goToIdle()); //same as OPTIONS
         gamePad2.getGamepadButton(GamepadKeys.Button.START).whenPressed(OpModeReference.getInstance().globalsSubSystem.goToIdle());
-        gamePad2.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(OpModeReference.getInstance().globalsSubSystem.setRobotStateCommand(RobotState.PARKASCENT));
 
         // Manual Adjustments
-        gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustUp());
-        gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustDown());
-        gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustUp());
-        gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(OpModeReference.getInstance().liftSubSystem.adjustDown());
-
-        gamePad1.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(OpModeReference.getInstance().intakeSubSystem.toggleClaw());
-        gamePad2.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(OpModeReference.getInstance().intakeSubSystem.toggleClaw());
-
-        gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(OpModeReference.getInstance().armSubSystem.adjustArmUp());
-        gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(OpModeReference.getInstance().armSubSystem.adjustArmDown());
-
-        gamePad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustWristUp());
-        gamePad2.getGamepadButton(GamepadKeys.Button.A).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustWristDown());
-
-        gamePad1.getGamepadButton(GamepadKeys.Button.X).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotLeft());
-        gamePad1.getGamepadButton(GamepadKeys.Button.B).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotRight());
-        gamePad2.getGamepadButton(GamepadKeys.Button.X).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotLeft());
-        gamePad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(OpModeReference.getInstance().intakeSubSystem.adjustRotRight());
-
         gamePad1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(OpModeReference.getInstance().limelightSubsystem.storeLimelightValue());
-        gamePad1.getGamepadButton(GamepadKeys.Button.A).whenPressed(OpModeReference.getInstance().limelightSubsystem.extensionLimelight());
+
     }
 
     @Override

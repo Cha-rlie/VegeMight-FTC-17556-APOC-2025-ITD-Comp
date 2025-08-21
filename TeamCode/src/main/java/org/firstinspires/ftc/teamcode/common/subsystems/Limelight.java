@@ -7,14 +7,13 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 
 import org.firstinspires.ftc.teamcode.common.OpModeReference;
 import org.firstinspires.ftc.teamcode.common.util.Globals;
-import org.firstinspires.ftc.teamcode.common.util.RobotState;
 
 public class Limelight extends SubsystemBase {
     private Limelight3A limelight;
 
     double limelightHeight = 17;
     double limelightAngle = 24.920;
-    double sampleHeight = 3.5;
+    double targetHeight = 3.5;
 
     double requiredTotalExtension=250;
     double possibleadjustmentValue =0;
@@ -33,8 +32,7 @@ public class Limelight extends SubsystemBase {
     public InstantCommand storeLimelightValue(){
         return new InstantCommand(()-> {
             LLResult result = limelight.getLatestResult();
-            requiredTotalExtension= (int) ((((limelightHeight-sampleHeight)/Math.tan(Math.toRadians(limelightAngle-result.getTy())))-15.625)/0.0425);
-            possibleadjustmentValue = (int) requiredTotalExtension-OpModeReference.getInstance().liftSubSystem.RTP;
+            requiredTotalExtension= (int) ((((limelightHeight- targetHeight)/Math.tan(Math.toRadians(limelightAngle-result.getTy())))-15.625)/0.0425);
             if (result != null) {
                 if (result.isValid() && requiredTotalExtension <800){
                     OpModeReference.getInstance().getTelemetry().addData("Req ext",requiredTotalExtension);
@@ -42,7 +40,6 @@ public class Limelight extends SubsystemBase {
                     storedadjustmentValue = (int) possibleadjustmentValue;
                     OpModeReference.getInstance().getTelemetry().addData("Attempted extension", possibleadjustmentValue);
                 } else if (result.isValid()){
-                    storedadjustmentValue = 800-OpModeReference.getInstance().liftSubSystem.RTP;
                     OpModeReference.getInstance().getTelemetry().addData("Attempted extension", possibleadjustmentValue);
                 } else {
                     OpModeReference.getInstance().getTelemetry().addLine("Invalid Result");
@@ -52,16 +49,6 @@ public class Limelight extends SubsystemBase {
             }
         });
     }
-
-    public InstantCommand extensionLimelight(){
-        return new InstantCommand(()-> {
-            if (globals.getRobotState() == RobotState.HOVERBEFOREGRAB) {
-                OpModeReference.getInstance().liftSubSystem.adjustment = storedadjustmentValue;
-            }
-        });
-    }
-
-
 
 
 }

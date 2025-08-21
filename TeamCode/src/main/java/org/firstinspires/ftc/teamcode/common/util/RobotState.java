@@ -6,29 +6,6 @@ public enum RobotState {
     INIT,
     IDLE,
     REJECT,
-
-    // New sample states
-    DEPOSIT,
-    DEPOSITRELEASE,
-    HOVERAFTERGRAB,
-    HOVERBEFOREGRAB,
-    GRAB,
-    GRABCLOSE,
-
-    // Backwards sample states
-    BACKWARDHOVERBEFOREGRAB,
-    BACKWARDGRAB,
-    BACKWARDHOVERAFTERGRAB,
-    BACKWARDSCORE,
-
-    // New specimen scoring states
-    DEPOSITSPECIMEN,
-    DEPOSITSPECIMENRELEASE,
-    SPECHOVERBEFOREGRAB,
-    SPECGRAB,
-
-    // Park
-    PARKNOASCENT,
-    PARKASCENT
-
+    INTAKE,
+    OUTTAKE
 }

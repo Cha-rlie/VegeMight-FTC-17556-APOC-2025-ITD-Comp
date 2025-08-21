@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.teamcode.common;
 
-import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.common.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.common.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.common.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.common.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.common.subsystems.Limelight;
-import org.firstinspires.ftc.teamcode.common.subsystems.Pitching;
+import org.firstinspires.ftc.teamcode.common.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.common.util.Globals;
+import org.firstinspires.ftc.teamcode.common.util.UpdateAndPowerScheduler;
 
 public class OpModeReference {
     private static OpModeReference instance = null;
@@ -21,11 +19,11 @@ public class OpModeReference {
     GamepadEx gamePad2;
     Telemetry telemetry;
     public Globals globalsSubSystem;
+    public UpdateAndPowerScheduler updateAndPowerScheduler;
     public DriveTrain driveTrainSubSystem;
-    public Arm armSubSystem;
     public Lift liftSubSystem;
-    public Pitching pitchingSubSystem;
     public Intake intakeSubSystem;
+    public Outtake outtakeSubSystem;
     public Limelight limelightSubsystem;
 
 
@@ -41,11 +39,11 @@ public class OpModeReference {
         this.telemetry = telemetry;
 
         globalsSubSystem = new Globals();
+        updateAndPowerScheduler = new UpdateAndPowerScheduler();
         driveTrainSubSystem = new DriveTrain();
-        armSubSystem = new Arm();
         liftSubSystem = new Lift();
-        pitchingSubSystem = new Pitching();
         intakeSubSystem = new Intake();
+        outtakeSubSystem = new Outtake();
         limelightSubsystem = new Limelight();
     }
 
@@ -67,9 +65,5 @@ public class OpModeReference {
 
     public Telemetry getTelemetry() {
         return telemetry;
-    }
-
-    public boolean isBusy() {
-        return intakeSubSystem.isBusy() || liftSubSystem.isBusy() || armSubSystem.isBusy() || pitchingSubSystem.isBusy();
     }
 }

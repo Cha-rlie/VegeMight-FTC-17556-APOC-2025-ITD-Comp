@@ -37,16 +37,45 @@ public class Intake extends SubsystemBase {
 
     public RunCommand defaultCommand() {
         return new RunCommand(()->{
-            if (!updateAndPowerScheduler.powerIntake){
-                claw.getController().pwmDisable();
-                clawRot.getController().pwmDisable();
-                wristRot.getController().pwmDisable();
-                arm.getController().pwmDisable();
-            } else {
-                claw.getController().pwmEnable();
-                clawRot.getController().pwmEnable();
-                wristRot.getController().pwmEnable();
-                arm.getController().pwmEnable();
+            if (updateAndPowerScheduler.intakeUpdate) {
+                if (!updateAndPowerScheduler.powerIntake){
+                    claw.getController().pwmDisable();
+                    clawRot.getController().pwmDisable();
+                    wristRot.getController().pwmDisable();
+                    arm.getController().pwmDisable();
+                } else {
+                    claw.getController().pwmEnable();
+                    clawRot.getController().pwmEnable();
+                    wristRot.getController().pwmEnable();
+                    arm.getController().pwmEnable();
+                }
+                switch (globals.getRobotState()) { //Change to hashmap later? - maybe not
+                    case IDLE:
+                        claw.setPosition(0);
+                        clawRot.setPosition(0);
+                        wristRot.setPosition(0);
+                        arm.setPosition(0);
+                    case INIT:
+                        claw.setPosition(0.1);
+                        clawRot.setPosition(0.1);
+                        wristRot.setPosition(0.1);
+                        arm.setPosition(0.1);
+                    case OUTTAKE:
+                        claw.setPosition(0.2);
+                        clawRot.setPosition(0.2);
+                        wristRot.setPosition(0.2);
+                        arm.setPosition(0.2);
+                    case INTAKE:
+                        claw.setPosition(0.3);
+                        clawRot.setPosition(0.3);
+                        wristRot.setPosition(0.3);
+                        arm.setPosition(0.3);
+                    case REJECT:
+                        claw.setPosition(0.4);
+                        clawRot.setPosition(0.4);
+                        wristRot.setPosition(0.4);
+                        arm.setPosition(0.4);
+                }
             }
         });
     }

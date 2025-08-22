@@ -23,7 +23,7 @@ public class Outtake extends SubsystemBase {
         testing2 = OpModeReference.getInstance().getHardwareMap().get(DcMotorEx.class, "testing 2");
 
         testing1.setPower(1);
-        testing2.setPower(2);
+        testing2.setPower(1);
 
         globals = OpModeReference.getInstance().globalsSubSystem;
         updateAndPowerScheduler = OpModeReference.getInstance().updateAndPowerScheduler;

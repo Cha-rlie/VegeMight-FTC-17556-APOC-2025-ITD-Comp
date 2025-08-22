@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.util;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 
@@ -14,13 +13,17 @@ import org.firstinspires.ftc.teamcode.common.OpModeReference;
 public class UpdateAndPowerScheduler extends SubsystemBase {
     public boolean powerIntake = false;
     public boolean powerOuttake = false;
+    public boolean powerLift = false;
+
     public boolean intakeUpdate = false;
     public boolean outtakeUpdate = false;
+    public boolean liftUpdate= false;
+
     public boolean intakeBusy = false;
     public boolean outtakeBusy = false;
+    public boolean liftBusy = false;
 
     public boolean robotBusy = false;
-    public boolean updateRobot = false;
 
     Globals globals;
 
@@ -45,7 +48,7 @@ public class UpdateAndPowerScheduler extends SubsystemBase {
                     powerIntake = true;
                     powerOuttake = false;
             }
-            if (intakeBusy && outtakeBusy) {
+            if (intakeBusy && outtakeBusy && liftBusy) {
                 robotBusy=true;
             } else {
                 robotBusy=false;
@@ -62,6 +65,12 @@ public class UpdateAndPowerScheduler extends SubsystemBase {
     public InstantCommand outtakeUpdate(){
         return new InstantCommand(()->{
            outtakeUpdate=true;
+        });
+    }
+
+    public InstantCommand liftUpdate(){
+        return new InstantCommand(()->{
+           liftUpdate = true;
         });
     }
 

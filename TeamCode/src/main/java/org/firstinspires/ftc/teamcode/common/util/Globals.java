@@ -22,6 +22,8 @@ public class Globals extends SubsystemBase {
     private RobotState robotState;
     public RobotState lastRobotState;
 
+    UpdateAndPowerScheduler updateAndPowerScheduler;
+
     private HashMap <RobotState, RobotState> goForwardStateValuesOnly;
     private HashMap <RobotState, RobotState> goBackwardStateValuesOnly;
 
@@ -42,58 +44,55 @@ public class Globals extends SubsystemBase {
 
         robotState = RobotState.IDLE;
         lastRobotState = RobotState.IDLE;
+
+        updateAndPowerScheduler = OpModeReference.getInstance().updateAndPowerScheduler;
     }
 
     public RobotState getRobotState() {
         return robotState;
     }
 
-    @NonNull
-    public void setRobotState(RobotState newRobotState) {
-        lastRobotState = robotState;
-        robotState = newRobotState;
-        updateRobotStateTrue = true;
-    }
-
     public InstantCommand setRobotStateCommand(RobotState newRobotState) {
         return new InstantCommand(()-> {
             lastRobotState = robotState;
             robotState = newRobotState;
-            updateRobotStateTrue = true;
+            updateAndPowerScheduler.robotUpdate=true;
         });
     }
 
     @NonNull
     public InstantCommand forwardsRobotState() {
         return new InstantCommand(()-> {
-                            robotState = goForwardStateValuesOnly.get(getRobotState());
-                        }
-                );
+            robotState = goForwardStateValuesOnly.get(getRobotState());
+            updateAndPowerScheduler.robotUpdate=true;
+        });
     }
 
     @NonNull
     public InstantCommand backwardsRobotState() {
         return new InstantCommand(()-> {
-                            robotState = goBackwardStateValuesOnly.get(getRobotState());
-                        }
-                );
+            robotState = goBackwardStateValuesOnly.get(getRobotState());
+            updateAndPowerScheduler.robotUpdate=true;
+        });
     }
 
     @NonNull
     public InstantCommand goToIdle() {
         return new InstantCommand(()-> {
-                    if (robotState != RobotState.IDLE) {
-                        robotState = RobotState.IDLE;
-                    }
-                });
+            if (robotState != RobotState.IDLE) {
+                robotState = RobotState.IDLE;
+            }
+            updateAndPowerScheduler.robotUpdate=true;
+        });
     }
 
 
     @NonNull
     public InstantCommand reject() {
         return new InstantCommand(()->{
-                    robotState= RobotState.REJECT;
-                });
+            robotState= RobotState.REJECT;
+            updateAndPowerScheduler.robotUpdate=true;
+        });
     }
 
 

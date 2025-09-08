@@ -38,7 +38,6 @@ public class FreshLibrary extends CommandOpMode {
 
         // Manual Adjustments
         gamePad1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(OpModeReference.getInstance().limelightSubsystem.storeLimelightValue());
-
     }
 
     @Override

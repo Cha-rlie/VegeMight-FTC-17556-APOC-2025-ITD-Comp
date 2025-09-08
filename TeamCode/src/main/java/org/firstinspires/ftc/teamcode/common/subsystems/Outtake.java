@@ -33,12 +33,15 @@ public class Outtake extends SubsystemBase {
 
     public RunCommand defaultCommand() {
         return new RunCommand(()->{
-            if (!updateAndPowerScheduler.powerOuttake) {
-                testing1.setMotorDisable();
-                testing2.setMotorDisable();
-            } else {
-                testing1.setMotorEnable();
-                testing2.setMotorEnable();
+            if (updateAndPowerScheduler.outtakeUpdate) {
+                if (!updateAndPowerScheduler.powerOuttake) {
+                    testing1.setMotorDisable();
+                    testing2.setMotorDisable();
+                } else {
+                    testing1.setMotorEnable();
+                    testing2.setMotorEnable();
+                }
+                updateAndPowerScheduler.outtakeUpdate=false;
             }
 
             testing1.setPower(1);

@@ -23,6 +23,7 @@ public class UpdateAndPowerScheduler extends SubsystemBase {
     public boolean outtakeBusy = false;
     public boolean liftBusy = false;
 
+    public boolean robotUpdate = false;
     public boolean robotBusy = false;
 
     Globals globals;
@@ -52,6 +53,12 @@ public class UpdateAndPowerScheduler extends SubsystemBase {
                 robotBusy=true;
             } else {
                 robotBusy=false;
+            }
+            if (robotUpdate) {
+                intakeUpdate=true;
+                outtakeUpdate=true;
+                liftUpdate=true;
+                robotUpdate=false;
             }
         });
     }

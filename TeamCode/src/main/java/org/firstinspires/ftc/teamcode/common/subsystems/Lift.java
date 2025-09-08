@@ -55,6 +55,7 @@ public class Lift extends SubsystemBase {
                        spoolL.setPower(1);
                        RTP=0;
                }
+               updateAndPowerScheduler.liftUpdate=false;
            }
            spoolR.setTargetPosition(RTP);
            spoolL.setTargetPosition(RTP);

@@ -28,12 +28,12 @@ public class Limelight extends SubsystemBase {
         globals = OpModeReference.getInstance().globalsSubSystem;
         limelight.start();
     }
-
+//
     public InstantCommand storeLimelightValue(){
         return new InstantCommand(()-> {
             LLResult result = limelight.getLatestResult();
             requiredTotalExtension= (int) ((((limelightHeight- targetHeight)/Math.tan(Math.toRadians(limelightAngle-result.getTy())))-15.625)/0.0425);
-            if (result != null) {
+            if (result != null) { //wassup caleb!!!!! da
                 if (result.isValid() && requiredTotalExtension <800){
                     OpModeReference.getInstance().getTelemetry().addData("Req ext",requiredTotalExtension);
                     OpModeReference.getInstance().getTelemetry().addData("ty", result.getTy());
